@@ -145,7 +145,7 @@ extension SourceKitLSPProvider {
     }
 }
 
-private extension SourceKitLSPProvider {
+extension SourceKitLSPProvider {
     func synchronizeDocument(
         _ file: URL
     ) async throws -> URL {
@@ -238,7 +238,7 @@ private extension SourceKitLSPProvider {
     }
 }
 
-private extension SwiftSemanticPosition {
+extension SwiftSemanticPosition {
     var lsp: SourceKitLSPPosition {
         .init(
             line: max(
@@ -253,7 +253,7 @@ private extension SwiftSemanticPosition {
     }
 }
 
-private extension SourceKitLSPRange {
+extension SourceKitLSPRange {
     var semantic: SwiftSemanticRange {
         .init(
             start: start.semantic,
@@ -262,7 +262,7 @@ private extension SourceKitLSPRange {
     }
 }
 
-private extension SourceKitLSPPosition {
+extension SourceKitLSPPosition {
     var semantic: SwiftSemanticPosition {
         .init(
             line: line + 1,
@@ -292,7 +292,7 @@ private extension Optional where Wrapped == Int {
     }
 }
 
-private extension Int {
+extension Int {
     var semantic: SwiftSemanticWorkspaceSymbolKind {
         switch self {
         case 1:

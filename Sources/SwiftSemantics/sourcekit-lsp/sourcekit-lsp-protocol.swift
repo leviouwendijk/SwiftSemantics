@@ -188,7 +188,37 @@ struct SourceKitLSPClientCapabilities:
             let relatedDocumentSupport = false
         }
 
+        struct Hover:
+            Encodable,
+            Sendable
+        {
+            let dynamicRegistration = false
+            let contentFormat = [
+                "markdown",
+                "plaintext",
+            ]
+        }
+
+        struct DocumentSymbol:
+            Encodable,
+            Sendable
+        {
+            let dynamicRegistration = false
+            let hierarchicalDocumentSymbolSupport = true
+        }
+
+        struct Hierarchy:
+            Encodable,
+            Sendable
+        {
+            let dynamicRegistration = false
+        }
+
         let diagnostic = Diagnostic()
+        let hover = Hover()
+        let documentSymbol = DocumentSymbol()
+        let callHierarchy = Hierarchy()
+        let typeHierarchy = Hierarchy()
     }
 
     struct Workspace:

@@ -12,5 +12,6 @@ enum SwiftSemanticsFlowSuite:
         structuralSemanticsFlow,
         sourceKitLSPSessionFlow,
         sourceKitLSPSemanticsFlow,
+        sourceKitLSPAdvancedSemanticsFlow,
     ]
 }
