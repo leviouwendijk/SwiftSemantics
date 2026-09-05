@@ -34,6 +34,10 @@ let package = Package(
             url: "https://github.com/swiftlang/swift-syntax.git",
             from: "603.0.1"
         ),
+        .package(
+            url: "https://github.com/leviouwendijk/Position.git",
+            branch: "master"
+        ),
     ],
     targets: [
         .target(
@@ -50,6 +54,10 @@ let package = Package(
                 .product(
                     name: "SwiftSyntax",
                     package: "swift-syntax"
+                ),
+                .product(
+                    name: "Position",
+                    package: "Position"
                 ),
             ]
         ),
