@@ -12,6 +12,11 @@ import Foundation
 public actor SwiftSemanticWorkspace {
     public nonisolated let root: URL
 
+    var compilerSessionState:
+        SwiftSemanticCompilerSessionState = .idle
+
+    var compilerSessionGeneration: UInt64 = 0
+
     public init(
         root: URL
     ) {

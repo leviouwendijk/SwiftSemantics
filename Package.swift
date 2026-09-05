@@ -27,6 +27,10 @@ let package = Package(
             branch: "master"
         ),
         .package(
+            url: "https://github.com/leviouwendijk/Processes.git",
+            branch: "master"
+        ),
+        .package(
             url: "https://github.com/leviouwendijk/TestFlows.git",
             branch: "master"
         ),
@@ -46,6 +50,10 @@ let package = Package(
                 .product(
                     name: "Executable",
                     package: "Executable"
+                ),
+                .product(
+                    name: "Processes",
+                    package: "Processes"
                 ),
                 .product(
                     name: "SwiftParser",

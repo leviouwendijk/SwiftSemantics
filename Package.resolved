@@ -1,5 +1,5 @@
 {
-  "originHash" : "e2b4678cde5da482b8d5c0139597374c4983026075d0e8049f40518db7c40486",
+  "originHash" : "873ee69708cbf82754f3ded4d093e5db8d103b99bd60cb7f7e6334ad52d944b3",
   "pins" : [
     {
       "identity" : "ansi",
@@ -142,7 +142,7 @@
       "location" : "https://github.com/leviouwendijk/Processes.git",
       "state" : {
         "branch" : "master",
-        "revision" : "b505bf0b5f756ebb301346651e86df9346944cbd"
+        "revision" : "48075baeb34d979ef45a785dedb56b0c590b967c"
       }
     },
     {

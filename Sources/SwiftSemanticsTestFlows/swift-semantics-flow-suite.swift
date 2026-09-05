@@ -10,5 +10,6 @@ enum SwiftSemanticsFlowSuite:
         packageGraphFlow,
         importInventoryFlow,
         structuralSemanticsFlow,
+        sourceKitLSPSessionFlow,
     ]
 }
