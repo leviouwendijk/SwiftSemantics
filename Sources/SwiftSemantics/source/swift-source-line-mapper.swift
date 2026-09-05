@@ -8,11 +8,14 @@ import Position
 struct SwiftSourceLineMapper:
     Sendable
 {
+    private let source: String
     let utf8LineStarts: [Int]
 
     init(
         source: String
     ) {
+        self.source = source
+
         var starts: [Int] = [
             0,
         ]
@@ -59,6 +62,49 @@ struct SwiftSourceLineMapper:
         }
 
         return best + 1
+    }
+
+    /// Resolve Position-style source coordinates into SwiftSyntax's absolute
+    /// UTF-8 offset space.
+    ///
+    /// Lines and columns are one-based. Columns advance by Unicode scalar,
+    /// matching `Position.LineColumnTracker`; the returned offset advances by
+    /// each scalar's UTF-8 byte count.
+    func utf8Offset(
+        line: Int,
+        column: Int
+    ) -> Int? {
+        guard
+            line > 0,
+            column > 0
+        else {
+            return nil
+        }
+
+        var tracker = LineColumnTracker()
+        var utf8Offset = 0
+
+        if tracker.line == line,
+           tracker.column == column
+        {
+            return utf8Offset
+        }
+
+        for scalar in source.unicodeScalars {
+            utf8Offset += scalar.utf8.count
+
+            tracker.advance(
+                over: scalar
+            )
+
+            if tracker.line == line,
+               tracker.column == column
+            {
+                return utf8Offset
+            }
+        }
+
+        return nil
     }
 
     func lineRange(

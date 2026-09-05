@@ -106,6 +106,28 @@ extension SwiftSemanticsFlowSuite {
                     ],
                     "enum case symbols"
                 )
+
+                let variables = symbols
+                    .filter {
+                        $0.kind == .variable
+                            && [
+                                "alpha",
+                                "beta",
+                            ].contains(
+                                $0.name
+                            )
+                    }
+                    .map(\.name)
+                    .sorted()
+
+                try Expect.equal(
+                    variables,
+                    [
+                        "alpha",
+                        "beta",
+                    ],
+                    "all bindings in one variable declaration become separate symbols"
+                )
             }
 
             Step(
@@ -235,6 +257,95 @@ extension SwiftSemanticsFlowSuite {
                     ),
                     "enclosing scope end"
                 )
+
+                let beta = try inspector.selections(
+                    in: fixture.source,
+                    query: .declaration(
+                        named: "beta"
+                    )
+                )
+
+                try Expect.equal(
+                    beta.count,
+                    1,
+                    "second variable binding is structurally selectable"
+                )
+
+                try Expect.equal(
+                    beta.first?.symbolName,
+                    Optional(
+                        "beta"
+                    ),
+                    "second variable binding selection name"
+                )
+
+                let slow = try inspector.selections(
+                    in: fixture.source,
+                    query: .member(
+                        named: "slow",
+                        parentType: "Mode"
+                    )
+                )
+
+                try Expect.equal(
+                    slow.count,
+                    1,
+                    "second enum-case element is structurally selectable"
+                )
+
+                let left = try inspector.selections(
+                    in: fixture.source,
+                    query: .enclosingScope(
+                        location: .init(
+                            line: 27,
+                            column: 32
+                        )
+                    )
+                )
+
+                try Expect.equal(
+                    left.first?.symbolName,
+                    Optional(
+                        "left"
+                    ),
+                    "column-aware scope selects left same-line function"
+                )
+
+                let right = try inspector.selections(
+                    in: fixture.source,
+                    query: .enclosingScope(
+                        location: .init(
+                            line: 27,
+                            column: 56
+                        )
+                    )
+                )
+
+                try Expect.equal(
+                    right.first?.symbolName,
+                    Optional(
+                        "right"
+                    ),
+                    "column-aware scope selects right same-line function"
+                )
+
+                let unicode = try inspector.selections(
+                    in: fixture.source,
+                    query: .enclosingScope(
+                        location: .init(
+                            line: 29,
+                            column: 55
+                        )
+                    )
+                )
+
+                try Expect.equal(
+                    unicode.first?.symbolName,
+                    Optional(
+                        "after"
+                    ),
+                    "Unicode-scalar column converts correctly to UTF-8 containment"
+                )
             }
         }
     }
@@ -286,6 +397,12 @@ private struct SwiftStructuralSemanticsFixture {
         enum Mode {
             case fast, slow
         }
+
+        let alpha = 1, beta = 2
+
+        func outer() { func left() { _ = 1 }; func right() { _ = 2 } }
+
+        func unicode() { let marker = "é"; func after() { _ = marker } }
         """.write(
             to: source,
             atomically: true,

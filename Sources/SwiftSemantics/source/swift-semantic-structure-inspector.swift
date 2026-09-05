@@ -83,9 +83,25 @@ private final class SwiftSemanticStructureVisitor:
     func matches() -> [SwiftSemanticStructureSelection] {
         switch query {
         case .enclosingScope(let location):
-            let containing = collected.filter { match in
-                match.selection.lineRange.start <= location.line
-                    && match.selection.lineRange.end >= location.line
+            let containing: [SwiftSemanticStructuralMatch]
+
+            if let column = location.column {
+                guard let offset = mapper.utf8Offset(
+                    line: location.line,
+                    column: column
+                ) else {
+                    return []
+                }
+
+                containing = collected.filter { match in
+                    match.startUTF8Offset <= offset
+                        && offset < match.endUTF8Offset
+                }
+            } else {
+                containing = collected.filter { match in
+                    match.selection.lineRange.start <= location.line
+                        && match.selection.lineRange.end >= location.line
+                }
             }
 
             guard let smallest = containing.min(
@@ -314,15 +330,17 @@ private final class SwiftSemanticStructureVisitor:
     override func visit(
         _ node: VariableDeclSyntax
     ) -> SyntaxVisitorContinueKind {
-        let name = variableName(
-            from: node
-        )
+        for binding in node.bindings {
+            let name = normalized(
+                binding.pattern.description
+            )
 
-        recordMemberLike(
-            node,
-            name: name,
-            summary: "var \(name)"
-        )
+            recordMemberLike(
+                binding,
+                name: name,
+                summary: "\(node.bindingSpecifier.text) \(name)"
+            )
+        }
 
         return .visitChildren
     }
@@ -330,14 +348,13 @@ private final class SwiftSemanticStructureVisitor:
     override func visit(
         _ node: EnumCaseDeclSyntax
     ) -> SyntaxVisitorContinueKind {
-        let name = node.elements.first?.name.text
-            ?? "case"
-
-        recordMemberLike(
-            node,
-            name: name,
-            summary: "case \(name)"
-        )
+        for element in node.elements {
+            recordMemberLike(
+                element,
+                name: element.name.text,
+                summary: "case \(element.name.text)"
+            )
+        }
 
         return .visitChildren
     }
@@ -542,18 +559,6 @@ private extension SwiftSemanticStructureVisitor {
                 endUTF8Offset: endOffset
             )
         )
-    }
-
-    func variableName(
-        from node: VariableDeclSyntax
-    ) -> String {
-        if let firstBinding = node.bindings.first {
-            return normalized(
-                firstBinding.pattern.description
-            )
-        }
-
-        return "var"
     }
 
     func normalized(

@@ -23,7 +23,14 @@ public struct SwiftSemanticSourceLocation:
     Sendable,
     Hashable
 {
+    /// One-based source line.
     public let line: Int
+
+    /// Optional one-based Unicode-scalar column using Position semantics.
+    ///
+    /// When omitted, structural containment is line-based. When supplied,
+    /// SwiftSemantics resolves this coordinate into SwiftSyntax's UTF-8 offset
+    /// space before testing containment.
     public let column: Int?
 
     public init(

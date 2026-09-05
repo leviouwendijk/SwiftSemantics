@@ -336,21 +336,19 @@ private final class SwiftSemanticSymbolVisitor:
     override func visit(
         _ node: VariableDeclSyntax
     ) -> SyntaxVisitorContinueKind {
-        guard let firstBinding = node.bindings.first else {
-            return .visitChildren
+        for binding in node.bindings {
+            let name = normalized(
+                binding.pattern.description
+            )
+
+            record(
+                binding,
+                kind: .variable,
+                name: name,
+                parentType: currentTypeName,
+                summary: "\(node.bindingSpecifier.text) \(name)"
+            )
         }
-
-        let name = normalized(
-            firstBinding.pattern.description
-        )
-
-        record(
-            node,
-            kind: .variable,
-            name: name,
-            parentType: currentTypeName,
-            summary: "var \(name)"
-        )
 
         return .visitChildren
     }
@@ -360,7 +358,7 @@ private final class SwiftSemanticSymbolVisitor:
     ) -> SyntaxVisitorContinueKind {
         for element in node.elements {
             record(
-                node,
+                element,
                 kind: .enum_case,
                 name: element.name.text,
                 parentType: currentTypeName,
