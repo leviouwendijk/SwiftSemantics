@@ -8,5 +8,6 @@ enum SwiftSemanticsFlowSuite:
 
     static let flows: [TestFlow] = [
         packageGraphFlow,
+        importInventoryFlow,
     ]
 }

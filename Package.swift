@@ -30,6 +30,10 @@ let package = Package(
             url: "https://github.com/leviouwendijk/TestFlows.git",
             branch: "master"
         ),
+        .package(
+            url: "https://github.com/swiftlang/swift-syntax.git",
+            from: "603.0.1"
+        ),
     ],
     targets: [
         .target(
@@ -38,6 +42,14 @@ let package = Package(
                 .product(
                     name: "Executable",
                     package: "Executable"
+                ),
+                .product(
+                    name: "SwiftParser",
+                    package: "swift-syntax"
+                ),
+                .product(
+                    name: "SwiftSyntax",
+                    package: "swift-syntax"
                 ),
             ]
         ),

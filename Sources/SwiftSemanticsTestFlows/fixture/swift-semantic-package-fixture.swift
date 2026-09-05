@@ -86,6 +86,7 @@ private extension SwiftSemanticPackageFixture {
             """
             import Helper
             import Leaf
+            import struct Foundation.Date
 
             public struct SemanticCore {
                 public init() {

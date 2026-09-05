@@ -1,5 +1,5 @@
 {
-  "originHash" : "ea2ff444a3ff1fe59c89ed27c7cc997aaffe60ef0a94b653b7a874663122573a",
+  "originHash" : "4b0ba7e1c0dc60b377af8ab5afa81a900f79ddda80189ebbaacf4c8df02ef253",
   "pins" : [
     {
       "identity" : "ansi",
@@ -43,7 +43,7 @@
       "location" : "https://github.com/leviouwendijk/Executable.git",
       "state" : {
         "branch" : "master",
-        "revision" : "97a99aef913724336020006d5cbe0f9591a30280"
+        "revision" : "43508a7d66ab9b28dc7cdabf403e458521a05a19"
       }
     },
     {
@@ -170,6 +170,15 @@
       "state" : {
         "revision" : "b3937ab85dd32f6e9435914599c1519074769c1a",
         "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
+      "state" : {
+        "revision" : "79e4b74a295b6eb74a8b585e3a39d29e70c1dbd1",
+        "version" : "603.0.2"
       }
     },
     {
