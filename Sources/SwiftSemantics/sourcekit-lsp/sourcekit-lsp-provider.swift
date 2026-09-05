@@ -10,8 +10,12 @@ actor SourceKitLSPProvider {
     nonisolated let info:
         SwiftSemanticCompilerSessionInfo
 
-    private let transport:
+    let transport:
         SourceKitLSPTransport
+
+    var openedDocuments: [
+        URL: SourceKitLSPOpenDocument
+    ] = [:]
 
     private var isShutdown = false
 
@@ -68,7 +72,7 @@ actor SourceKitLSPProvider {
                     version: nil
                 ),
                 rootUri: root.absoluteString,
-                capabilities: [:],
+                capabilities: .init(),
                 workspaceFolders: [
                     .init(
                         uri: root.absoluteString,

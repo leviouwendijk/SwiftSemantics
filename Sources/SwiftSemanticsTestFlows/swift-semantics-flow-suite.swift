@@ -11,5 +11,6 @@ enum SwiftSemanticsFlowSuite:
         importInventoryFlow,
         structuralSemanticsFlow,
         sourceKitLSPSessionFlow,
+        sourceKitLSPSemanticsFlow,
     ]
 }

@@ -136,6 +136,79 @@ struct SourceKitLSPServerErrorResponse:
     let error: Payload
 }
 
+struct SourceKitLSPServerNullResponse:
+    Encodable
+{
+    let jsonrpc = "2.0"
+    let id: SourceKitLSPMessageID
+
+    enum CodingKeys:
+        String,
+        CodingKey
+    {
+        case jsonrpc
+        case id
+        case result
+    }
+
+    func encode(
+        to encoder: Encoder
+    ) throws {
+        var container = encoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        try container.encode(
+            jsonrpc,
+            forKey: .jsonrpc
+        )
+        try container.encode(
+            id,
+            forKey: .id
+        )
+        try container.encodeNil(
+            forKey: .result
+        )
+    }
+}
+
+struct SourceKitLSPClientCapabilities:
+    Encodable,
+    Sendable
+{
+    struct TextDocument:
+        Encodable,
+        Sendable
+    {
+        struct Diagnostic:
+            Encodable,
+            Sendable
+        {
+            let dynamicRegistration = false
+            let relatedDocumentSupport = false
+        }
+
+        let diagnostic = Diagnostic()
+    }
+
+    struct Workspace:
+        Encodable,
+        Sendable
+    {
+        struct Diagnostics:
+            Encodable,
+            Sendable
+        {
+            let refreshSupport = true
+        }
+
+        let diagnostics = Diagnostics()
+    }
+
+    let textDocument = TextDocument()
+    let workspace = Workspace()
+}
+
 struct SourceKitLSPInitializeParams:
     Encodable,
     Sendable
@@ -159,7 +232,7 @@ struct SourceKitLSPInitializeParams:
     let processId: Int32
     let clientInfo: ClientInfo
     let rootUri: String
-    let capabilities: [String: String]
+    let capabilities: SourceKitLSPClientCapabilities
     let workspaceFolders: [WorkspaceFolder]
 }
 

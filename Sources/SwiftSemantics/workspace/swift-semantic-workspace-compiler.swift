@@ -9,9 +9,45 @@ public extension SwiftSemanticWorkspace {
         async throws
         -> SwiftSemanticCompilerSessionInfo
     {
+        let provider = try await compilerProvider()
+
+        return provider.info
+    }
+
+    /// Gracefully stop the workspace compiler-semantic provider.
+    ///
+    /// A later semantic request may start a fresh session again.
+    func shutdownCompilerSession() async throws {
+        switch compilerSessionState {
+        case .idle:
+            return
+
+        case .ready(let provider):
+            compilerSessionState = .idle
+            try await provider.shutdown()
+
+        case .starting(
+            _,
+            let task
+        ):
+            compilerSessionState = .idle
+            task.cancel()
+
+            if let provider = try? await task.value {
+                try? await provider.shutdown()
+            }
+        }
+    }
+}
+
+extension SwiftSemanticWorkspace {
+    func compilerProvider()
+        async throws
+        -> SourceKitLSPProvider
+    {
         switch compilerSessionState {
         case .ready(let provider):
-            return provider.info
+            return provider
 
         case .starting(
             let generation,
@@ -46,40 +82,13 @@ public extension SwiftSemanticWorkspace {
         }
     }
 
-    /// Gracefully stop the workspace compiler-semantic provider.
-    ///
-    /// A later semantic request may start a fresh session again.
-    func shutdownCompilerSession() async throws {
-        switch compilerSessionState {
-        case .idle:
-            return
-
-        case .ready(let provider):
-            compilerSessionState = .idle
-            try await provider.shutdown()
-
-        case .starting(
-            _,
-            let task
-        ):
-            compilerSessionState = .idle
-            task.cancel()
-
-            if let provider = try? await task.value {
-                try? await provider.shutdown()
-            }
-        }
-    }
-}
-
-private extension SwiftSemanticWorkspace {
     func completeCompilerSessionStart(
         generation: UInt64,
         task: Task<
             SourceKitLSPProvider,
             any Error
         >
-    ) async throws -> SwiftSemanticCompilerSessionInfo {
+    ) async throws -> SourceKitLSPProvider {
         do {
             let provider = try await task.value
 
@@ -92,10 +101,10 @@ private extension SwiftSemanticWorkspace {
                     provider
                 )
 
-                return provider.info
+                return provider
 
             case .ready(let currentProvider):
-                return currentProvider.info
+                return currentProvider
 
             case .idle,
                  .starting:

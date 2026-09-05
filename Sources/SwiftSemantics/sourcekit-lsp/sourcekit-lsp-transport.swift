@@ -108,6 +108,66 @@ actor SourceKitLSPTransport {
         return result
     }
 
+    /// Send a request whose successful LSP result may legally be null.
+    func requestOptional<Params, Result>(
+        method: String,
+        params: Params,
+        timeout: Duration = .seconds(
+            30
+        )
+    ) async throws -> Result?
+    where
+        Params: Encodable & Sendable,
+        Result: Decodable & Sendable
+    {
+        let id = allocateRequestID()
+
+        let body: Data
+
+        do {
+            body = try JSONEncoder().encode(
+                SourceKitLSPRequest(
+                    id: id,
+                    method: method,
+                    params: params
+                )
+            )
+        } catch {
+            throw SwiftSemanticCompilerError.protocolViolation(
+                "Could not encode request '\(method)': \(error)"
+            )
+        }
+
+        let responseBody = try await awaitResponse(
+            id: id,
+            method: method,
+            body: body,
+            timeout: timeout
+        )
+
+        let response: SourceKitLSPResponse<Result>
+
+        do {
+            response = try JSONDecoder().decode(
+                SourceKitLSPResponse<Result>.self,
+                from: responseBody
+            )
+        } catch {
+            throw SwiftSemanticCompilerError.protocolViolation(
+                "Could not decode response for '\(method)': \(error)"
+            )
+        }
+
+        if let error = response.error {
+            throw SwiftSemanticCompilerError.requestFailed(
+                code: error.code,
+                message: error.message
+            )
+        }
+
+        return response.result
+    }
+
     func requestWithoutResult(
         method: String,
         timeout: Duration = .seconds(
@@ -425,10 +485,18 @@ private extension SourceKitLSPTransport {
 
         if let method = envelope.method {
             if let id = envelope.id {
-                try await rejectServerRequest(
-                    id: id,
-                    method: method
-                )
+                switch method {
+                case "workspace/diagnostic/refresh":
+                    try await acknowledgeServerRequest(
+                        id: id
+                    )
+
+                default:
+                    try await rejectServerRequest(
+                        id: id,
+                        method: method
+                    )
+                }
             }
 
             return
@@ -448,6 +516,28 @@ private extension SourceKitLSPTransport {
             body
         )
         continuation.finish()
+    }
+
+    func acknowledgeServerRequest(
+        id: SourceKitLSPMessageID
+    ) async throws {
+        let body: Data
+
+        do {
+            body = try JSONEncoder().encode(
+                SourceKitLSPServerNullResponse(
+                    id: id
+                )
+            )
+        } catch {
+            throw SwiftSemanticCompilerError.protocolViolation(
+                "Could not encode JSON-RPC server-request acknowledgement: \(error)"
+            )
+        }
+
+        try await writeBody(
+            body
+        )
     }
 
     func rejectServerRequest(
