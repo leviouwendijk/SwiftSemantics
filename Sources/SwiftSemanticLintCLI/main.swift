@@ -2,6 +2,7 @@ import Arguments
 import Foundation
 import Path
 import PathParsing
+import SwiftSemanticLintPresentation
 import SwiftSemantics
 
 @main
@@ -22,6 +23,16 @@ enum SwiftSemanticLintCLI:
                 "errors-only",
                 help: "Fail only when an error-severity authored rule diagnostic is emitted."
             ),
+            flag(
+                "report-only",
+                help: "Report diagnostics without returning a lint-enforcement failure."
+            ),
+            opt(
+                "format",
+                as: String.self,
+                default: "terminal",
+                help: "Diagnostic presentation format: terminal or compact."
+            ),
             arg(
                 "paths",
                 as: String.self,
@@ -36,6 +47,15 @@ enum SwiftSemanticLintCLI:
     ) async throws {
         let errorsOnly = try invocation.flag(
             "errors-only"
+        )
+        let reportOnly = try invocation.flag(
+            "report-only"
+        )
+        let format = try SemanticLintOutputFormat(
+            argument: invocation.value(
+                "format",
+                as: String.self
+            ) ?? "terminal"
         )
         let suppliedPaths = try invocation.values(
             "paths",
@@ -94,49 +114,39 @@ enum SwiftSemanticLintCLI:
             )
         }
 
-        if !diagnostics.isEmpty {
-            let renderedDiagnostics = diagnostics
-                .map { diagnostic in
-                    rendered(
-                        diagnostic,
-                        root: root
-                    )
-                }
-                .joined(
-                    separator: "\n\n"
-                )
+        let result = SwiftSemanticLint.Result(
+            files: files,
+            diagnostics: diagnostics
+        )
+        let projection = SwiftSemanticLint.Projector(
+            root: root
+        )
+        .project(
+            result
+        )
+        let presenter: any SemanticLintPresenting
 
-            print(
-                renderedDiagnostics
-            )
-            print("")
-        }
-
-        let errors = diagnostics.count { diagnostic in
-            diagnostic.severity == .error
-        }
-        let warnings = diagnostics.count { diagnostic in
-            diagnostic.severity == .warning
-        }
-        let information = diagnostics.count { diagnostic in
-            diagnostic.severity == .information
-        }
-        let hints = diagnostics.count { diagnostic in
-            diagnostic.severity == .hint
+        switch format {
+        case .terminal:
+            presenter = SemanticLintPresenters.Terminal()
+        case .compact:
+            presenter = SemanticLintPresenters.Compact()
         }
 
         print(
-            "semlint: \(files.count) file(s), \(diagnostics.count) diagnostic(s), \(errors) error(s), \(warnings) warning(s), \(information) information, \(hints) hint(s)"
+            presenter.render(
+                projection
+            )
         )
 
         let failed = errorsOnly
-            ? errors > 0
-            : !diagnostics.isEmpty
+            ? result.hasErrors
+            : !result.diagnostics.isEmpty
 
-        guard !failed else {
+        guard reportOnly || !failed else {
             throw SemanticLintViolation(
-                diagnosticCount: diagnostics.count,
-                errorCount: errors
+                diagnosticCount: result.summary.diagnostics,
+                errorCount: result.summary.errors
             )
         }
     }
@@ -147,12 +157,35 @@ private enum SemanticLintCLIError:
     LocalizedError
 {
     case noSwiftSources
+    case unsupportedFormat(String)
 
     var errorDescription: String? {
         switch self {
         case .noSwiftSources:
             return "No Swift source files were found."
+        case .unsupportedFormat(let value):
+            return "Unsupported lint output format '\(value)'. Use terminal or compact."
         }
+    }
+}
+
+private enum SemanticLintOutputFormat:
+    String,
+    Sendable
+{
+    case terminal
+    case compact
+
+    init(
+        argument: String
+    ) throws {
+        guard let value = Self(rawValue: argument) else {
+            throw SemanticLintCLIError.unsupportedFormat(
+                argument
+            )
+        }
+
+        self = value
     }
 }
 
@@ -192,42 +225,3 @@ private func swiftFiles(
         }
 }
 
-private func rendered(
-    _ diagnostic: SwiftSemanticRuleDiagnostic,
-    root: URL
-) -> String {
-    let file = diagnostic.file.map { file in
-        displayPath(
-            file,
-            root: root
-        )
-    } ?? "<source>"
-    let range: String
-
-    if let lineRange = diagnostic.lineRange {
-        range = ":\(lineRange.start)-\(lineRange.end)"
-    } else {
-        range = ""
-    }
-
-    return "\(file)\(range): \(diagnostic.severity.rawValue) \(diagnostic.ruleID.rawValue): \(diagnostic.message)"
-}
-
-private func displayPath(
-    _ file: URL,
-    root: URL
-) -> String {
-    let rootPrefix = root.path.hasSuffix("/")
-        ? root.path
-        : root.path + "/"
-
-    guard file.path.hasPrefix(rootPrefix) else {
-        return file.path
-    }
-
-    return String(
-        file.path.dropFirst(
-            rootPrefix.count
-        )
-    )
-}

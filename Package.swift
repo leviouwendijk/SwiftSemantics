@@ -67,6 +67,10 @@ let package = Package(
             branch: "master"
         ),
         .package(
+            url: "https://github.com/leviouwendijk/ANSI.git",
+            branch: "master"
+        ),
+        .package(
             url: "https://github.com/leviouwendijk/Path.git",
             branch: "master"
         ),
@@ -122,10 +126,21 @@ let package = Package(
                 ),
             ]
         ),
+        .target(
+            name: "SwiftSemanticLintPresentation",
+            dependencies: [
+                "SwiftSemantics",
+                .product(
+                    name: "ANSI",
+                    package: "ANSI"
+                ),
+            ]
+        ),
         .executableTarget(
             name: "SwiftSemanticLintCLI",
             dependencies: [
                 "SwiftSemantics",
+                "SwiftSemanticLintPresentation",
                 .product(
                     name: "Arguments",
                     package: "Arguments"
@@ -144,6 +159,7 @@ let package = Package(
             name: "SwiftSemanticsTestFlows",
             dependencies: [
                 "SwiftSemantics",
+                "SwiftSemanticLintPresentation",
                 .product(
                     name: "TestFlows",
                     package: "TestFlows"

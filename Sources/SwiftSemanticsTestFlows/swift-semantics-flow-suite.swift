@@ -21,6 +21,7 @@ enum SwiftSemanticsFlowSuite:
         designConventionProofFlow,
         architectureRulesFlow,
         architectureProofFlow,
+        lintPresentationFlow,
         generatedRuleCatalogFlow,
         sourceKitLSPSessionFlow,
         sourceKitLSPSemanticsFlow,
