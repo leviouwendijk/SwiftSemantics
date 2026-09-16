@@ -21,12 +21,19 @@ public extension SwiftSemanticWorkspace {
     func swiftSourceFiles(
         forProductKinds kinds: Set<SwiftSemanticPackageGraph.Product.Kind>
     ) async throws -> [URL] {
-        let graph = try await packageGraph()
+        let manifest = try await Executable.Package.manifest(
+            at: root
+        )
         let inventory = try await sourceInventory()
+        let selectedKinds = Set(
+            kinds.map(\.rawValue)
+        )
         let targetNames = Set(
-            graph.products
+            manifest.products
                 .filter { product in
-                    kinds.contains(product.kind)
+                    selectedKinds.contains(
+                        product.kind.rawValue
+                    )
                 }
                 .flatMap(\.targets)
         )
