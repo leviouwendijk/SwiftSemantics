@@ -1,5 +1,7 @@
 import Arguments
 import Foundation
+import Path
+import PathParsing
 import SwiftSemantics
 
 @main
@@ -24,7 +26,7 @@ enum SwiftSemanticLintCLI:
                 "paths",
                 as: String.self,
                 arity: .variadic,
-                help: "Swift source files or directories to lint. Defaults to Sources."
+                help: "Swift path expressions relative to the package root. Use ** for recursive selection. Omit to lint library-product targets."
             ),
         ]
     }
@@ -39,17 +41,28 @@ enum SwiftSemanticLintCLI:
             "paths",
             as: String.self
         )
-        let paths = suppliedPaths.isEmpty
-            ? ["Sources"]
-            : suppliedPaths
         let root = URL(
             fileURLWithPath: FileManager.default.currentDirectoryPath
         )
         .standardizedFileURL
-        let files = try swiftFiles(
-            paths: paths,
-            root: root
-        )
+        let files: [URL]
+
+        if suppliedPaths.isEmpty {
+            let workspace = SwiftSemanticWorkspace(
+                root: root
+            )
+
+            files = try await workspace.swiftSourceFiles(
+                forProductKinds: [
+                    .library,
+                ]
+            )
+        } else {
+            files = try swiftFiles(
+                expressions: suppliedPaths,
+                root: root
+            )
+        }
 
         guard !files.isEmpty else {
             throw SemanticLintCLIError.noSwiftSources
@@ -116,14 +129,10 @@ private enum SemanticLintCLIError:
     Error,
     LocalizedError
 {
-    case missingPath(String)
     case noSwiftSources
 
     var errorDescription: String? {
         switch self {
-        case .missingPath(let path):
-            return "Lint path does not exist: \(path)"
-
         case .noSwiftSources:
             return "No Swift source files were found."
         }
@@ -143,69 +152,27 @@ private struct SemanticLintViolation:
 }
 
 private func swiftFiles(
-    paths: [String],
+    expressions: [String],
     root: URL
 ) throws -> [URL] {
-    let manager = FileManager.default
-    var files: Set<URL> = []
-
-    for path in paths {
-        let candidate = URL(
-            fileURLWithPath: path,
-            relativeTo: root
-        )
-        .standardizedFileURL
-        var isDirectory: ObjCBool = false
-
-        guard manager.fileExists(
-            atPath: candidate.path,
-            isDirectory: &isDirectory
-        ) else {
-            throw SemanticLintCLIError.missingPath(
-                path
-            )
+    let scan = try ParsedPathScan.scan(
+        includes: expressions,
+        relativeTo: .directoryURL(root)
+    )
+    let files: [URL] = scan.matches.compactMap {
+        (match: PathScanMatch) -> URL? in
+        guard match.type == .file,
+              match.url.pathExtension == "swift" else {
+            return nil
         }
 
-        if isDirectory.boolValue {
-            guard let enumerator = manager.enumerator(
-                at: candidate,
-                includingPropertiesForKeys: [
-                    .isRegularFileKey,
-                ],
-                options: [
-                    .skipsHiddenFiles,
-                ]
-            ) else {
-                continue
-            }
+        return match.url.standardizedFileURL
+    }
 
-            for case let file as URL in enumerator {
-                guard file.pathExtension == "swift" else {
-                    continue
-                }
-
-                let values = try file.resourceValues(
-                    forKeys: [
-                        .isRegularFileKey,
-                    ]
-                )
-
-                if values.isRegularFile == true {
-                    files.insert(
-                        file.standardizedFileURL
-                    )
-                }
-            }
-        } else if candidate.pathExtension == "swift" {
-            files.insert(
-                candidate
-            )
+    return Array(Set(files))
+        .sorted { lhs, rhs in
+            lhs.path < rhs.path
         }
-    }
-
-    return files.sorted { lhs, rhs in
-        lhs.path < rhs.path
-    }
 }
 
 private func rendered(

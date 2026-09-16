@@ -1,4 +1,5 @@
 import Executable
+import Foundation
 
 public extension SwiftSemanticWorkspace {
     /// Return SwiftPM-authoritative target/source membership in semantic types.
@@ -13,6 +14,35 @@ public extension SwiftSemanticWorkspace {
         return SwiftSemanticSourceInventory(
             executable: inventory
         )
+    }
+
+    /// Return Swift source files owned directly by root-package products whose
+    /// kinds are selected by the caller.
+    func swiftSourceFiles(
+        forProductKinds kinds: Set<SwiftSemanticPackageGraph.Product.Kind>
+    ) async throws -> [URL] {
+        let graph = try await packageGraph()
+        let inventory = try await sourceInventory()
+        let targetNames = Set(
+            graph.products
+                .filter { product in
+                    kinds.contains(product.kind)
+                }
+                .flatMap(\.targets)
+        )
+        let files = inventory.targets
+            .filter { target in
+                targetNames.contains(target.name)
+            }
+            .flatMap(\.sourceFiles)
+            .filter { file in
+                file.pathExtension == "swift"
+            }
+
+        return Array(Set(files))
+            .sorted { lhs, rhs in
+                lhs.path < rhs.path
+            }
     }
 
     /// Parse imports only from source files SwiftPM assigns to root-package

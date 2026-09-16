@@ -65,6 +65,18 @@ extension SwiftSemanticsFlowSuite {
                     "SwiftPM-owned SemanticCore source membership"
                 )
 
+                let librarySources = try await workspace.swiftSourceFiles(
+                    forProductKinds: [
+                        .library,
+                    ]
+                )
+
+                try Expect.equal(
+                    librarySources,
+                    sourceCore.sourceFiles,
+                    "library-product source selection excludes non-product helper targets"
+                )
+
                 let imports = try await workspace.importInventory()
 
                 let core = try Expect.notNil(
