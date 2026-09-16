@@ -1,49 +1,92 @@
+import Arguments
 import Foundation
 import SwiftParser
 import SwiftSyntax
 
 @main
-struct SwiftSemanticRuleCatalogGenerator {
-    static func main() throws {
-        let arguments = CommandLine.arguments
+enum SwiftSemanticRuleCatalogGenerator:
+    RunnableArgumentCommand
+{
+    private enum Mode {
+        case write
+        case check
+    }
 
-        let rulesDirectory: URL
-        let output: URL
+    static let name = "semrules"
 
-        switch arguments.count {
-        case 1:
-            let root = URL(
-                fileURLWithPath: FileManager.default.currentDirectoryPath
-            )
-            .standardizedFileURL
+    static func main() async {
+        await ArgumentProgram.main(
+            command: Self.self
+        )
+    }
 
-            rulesDirectory = root.appending(
-                path: "Sources/SwiftSemantics/rules"
-            )
+    static func components() throws -> [CommandComponentLowerable] {
+        [
+            flag(
+                "check",
+                help: "Fail when the checked-in generated rule catalog is stale."
+            ),
+            arg(
+                "rules_directory",
+                as: String.self,
+                arity: .optional,
+                help: "Optional rules directory. Must be supplied together with output_file."
+            ),
+            arg(
+                "output_file",
+                as: String.self,
+                arity: .optional,
+                help: "Optional generated output file. Must be supplied together with rules_directory."
+            ),
+        ]
+    }
 
-            output = rulesDirectory.appending(
-                path: "swift-semantic-rule-catalog.generated.swift"
-            )
+    static func run(
+        _ invocation: ParsedInvocation
+    ) async throws {
+        let mode: Mode = try invocation.flag(
+            "check"
+        )
+            ? .check
+            : .write
+        let rulesPath = try invocation.value(
+            "rules_directory",
+            as: String.self
+        )
+        let outputPath = try invocation.value(
+            "output_file",
+            as: String.self
+        )
 
-        case 3:
-            rulesDirectory = URL(
-                fileURLWithPath: arguments[1]
-            )
-            .standardizedFileURL
-
-            output = URL(
-                fileURLWithPath: arguments[2]
-            )
-            .standardizedFileURL
-
-        default:
+        guard (rulesPath == nil) == (outputPath == nil) else {
             throw GeneratorError.invalidArguments
         }
+
+        let root = URL(
+            fileURLWithPath: FileManager.default.currentDirectoryPath
+        )
+        .standardizedFileURL
+        let defaultRulesDirectory = root.appending(
+            path: "Sources/SwiftSemantics/rules"
+        )
+        let rulesDirectory = rulesPath.map { path in
+            URL(
+                fileURLWithPath: path
+            )
+            .standardizedFileURL
+        } ?? defaultRulesDirectory
+        let output = outputPath.map { path in
+            URL(
+                fileURLWithPath: path
+            )
+            .standardizedFileURL
+        } ?? rulesDirectory.appending(
+            path: "swift-semantic-rule-catalog.generated.swift"
+        )
 
         let sourceFiles = try swiftFiles(
             below: rulesDirectory
         )
-
         var discovered: Set<String> = []
 
         for file in sourceFiles {
@@ -51,11 +94,9 @@ struct SwiftSemanticRuleCatalogGenerator {
                 contentsOf: file,
                 encoding: .utf8
             )
-
             let syntax = Parser.parse(
                 source: source
             )
-
             let visitor = RuleVisitor(
                 viewMode: .sourceAccurate
             )
@@ -63,7 +104,6 @@ struct SwiftSemanticRuleCatalogGenerator {
             visitor.walk(
                 syntax
             )
-
             discovered.formUnion(
                 visitor.ruleTypeNames
             )
@@ -79,16 +119,34 @@ struct SwiftSemanticRuleCatalogGenerator {
             ruleTypeNames: ruleTypeNames
         )
 
-        try FileManager.default.createDirectory(
-            at: output.deletingLastPathComponent(),
-            withIntermediateDirectories: true
-        )
+        switch mode {
+        case .write:
+            try FileManager.default.createDirectory(
+                at: output.deletingLastPathComponent(),
+                withIntermediateDirectories: true
+            )
+            try generated.write(
+                to: output,
+                atomically: true,
+                encoding: .utf8
+            )
 
-        try generated.write(
-            to: output,
-            atomically: true,
-            encoding: .utf8
-        )
+        case .check:
+            guard FileManager.default.fileExists(
+                atPath: output.path
+            ) else {
+                throw GeneratorError.staleCatalog
+            }
+
+            let existing = try String(
+                contentsOf: output,
+                encoding: .utf8
+            )
+
+            guard existing == generated else {
+                throw GeneratorError.staleCatalog
+            }
+        }
     }
 }
 
@@ -98,14 +156,18 @@ private enum GeneratorError:
 {
     case invalidArguments
     case noRulesDiscovered
+    case staleCatalog
 
     var errorDescription: String? {
         switch self {
         case .invalidArguments:
-            return "Run with no arguments from the SwiftSemantics package root, or provide rules-directory and output-file arguments."
+            return "Run with no arguments, with --check, with rules-directory and output-file arguments, or with --check followed by rules-directory and output-file arguments."
 
         case .noRulesDiscovered:
             return "No concrete SwiftSemanticRule declarations were discovered."
+
+        case .staleCatalog:
+            return "Generated Swift semantic rule catalog is stale. Run 'swift run semrules' and commit the generated output."
         }
     }
 }

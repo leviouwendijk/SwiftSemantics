@@ -26,6 +26,12 @@ let package = Package(
                 "SwiftSemanticRuleCatalogGenerator",
             ]
         ),
+        .executable(
+            name: "semlint",
+            targets: [
+                "SwiftSemanticLintCLI",
+            ]
+        ),
     ],
     dependencies: [
         .package(
@@ -54,6 +60,10 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/leviouwendijk/Macros.git",
+            branch: "master"
+        ),
+        .package(
+            url: "https://github.com/leviouwendijk/Arguments.git",
             branch: "master"
         ),
     ],
@@ -95,12 +105,26 @@ let package = Package(
             name: "SwiftSemanticRuleCatalogGenerator",
             dependencies: [
                 .product(
+                    name: "Arguments",
+                    package: "Arguments"
+                ),
+                .product(
                     name: "SwiftParser",
                     package: "swift-syntax"
                 ),
                 .product(
                     name: "SwiftSyntax",
                     package: "swift-syntax"
+                ),
+            ]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticLintCLI",
+            dependencies: [
+                "SwiftSemantics",
+                .product(
+                    name: "Arguments",
+                    package: "Arguments"
                 ),
             ]
         ),
