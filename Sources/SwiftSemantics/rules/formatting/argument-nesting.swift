@@ -58,10 +58,11 @@ public extension SwiftSemanticRules.Formatting {
                         let labelLine = source.lineRange(
                             of: label
                         )?.start,
-                        let expressionLine = source.lineRange(
+                        let expressionRange = source.lineRange(
                             of: argument.expression
-                        )?.start,
-                        expressionLine > labelLine else {
+                        ),
+                        expressionRange.start > labelLine,
+                        expressionRange.start == expressionRange.end else {
                         continue
                     }
 
@@ -70,7 +71,7 @@ public extension SwiftSemanticRules.Formatting {
                             ruleID: ruleID,
                             severity: .warning,
                             message:
-                                "Keep an argument label attached to the expression it introduces; do not add indentation merely beneath the label.",
+                                "Keep a single-line argument expression attached to its label; do not move it beneath the label.",
                             file: source.file,
                             lineRange: source.lineRange(
                                 of: argument

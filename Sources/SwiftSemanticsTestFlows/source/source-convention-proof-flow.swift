@@ -187,6 +187,35 @@ extension SwiftSemanticsFlowSuite {
                 try await RuleFixture(
                     source: """
                     foo(
+                        value:
+                            build(thing)
+                    )
+                    """,
+                    expectedCount: 1,
+                    expectedSeverity: .warning
+                ).assert(
+                    rule,
+                    label: "single-line call detached below label"
+                )
+
+                try await RuleFixture(
+                    source: """
+                    foo(
+                        value:
+                            build(
+                                thing
+                            )
+                    )
+                    """,
+                    expectedCount: 0
+                ).assert(
+                    rule,
+                    label: "multiline call may begin below label"
+                )
+
+                try await RuleFixture(
+                    source: """
+                    foo(
                         items: [
                             1,
                         ]
