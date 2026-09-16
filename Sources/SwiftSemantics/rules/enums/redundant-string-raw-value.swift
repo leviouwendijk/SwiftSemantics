@@ -87,6 +87,7 @@ public extension SwiftSemanticRules.Enums {
         private final class Visitor:
             SyntaxVisitor
         {
+            private var stringEnumStack: [Bool] = []
             private(set) var nodes: [EnumCaseElementSyntax] = []
 
             init() {
@@ -96,9 +97,33 @@ public extension SwiftSemanticRules.Enums {
             }
 
             override func visit(
+                _ node: EnumDeclSyntax
+            ) -> SyntaxVisitorContinueKind {
+                let isString = node.inheritanceClause?
+                    .inheritedTypes
+                    .contains { inherited in
+                        inherited.type.trimmedDescription == "String"
+                    } == true
+
+                stringEnumStack.append(
+                    isString
+                )
+
+                return .visitChildren
+            }
+
+            override func visitPost(
+                _ node: EnumDeclSyntax
+            ) {
+                _ = node
+                _ = stringEnumStack.popLast()
+            }
+
+            override func visit(
                 _ node: EnumCaseElementSyntax
             ) -> SyntaxVisitorContinueKind {
-                if node.rawValue != nil {
+                if stringEnumStack.last == true,
+                   node.rawValue != nil {
                     nodes.append(
                         node
                     )
