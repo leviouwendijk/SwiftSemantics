@@ -1,5 +1,4 @@
 import Foundation
-import SwiftParser
 import SwiftSyntax
 
 /// SwiftSyntax-backed structural selection over one Swift source file.
@@ -16,32 +15,30 @@ public struct SwiftSemanticStructureInspector:
         in file: URL,
         query: SwiftSemanticStructureQuery
     ) throws -> [SwiftSemanticStructureSelection] {
-        let file = file.standardizedFileURL
+        try selections(
+            in: SwiftSemanticSource(
+                file: file
+            ),
+            query: query
+        )
+    }
 
-        guard file.pathExtension == "swift" else {
-            throw SwiftSemanticSourceInspectionError.unsupportedFile(
-                file.path
-            )
+    public func selections(
+        in source: SwiftSemanticSource,
+        query: SwiftSemanticStructureQuery
+    ) throws -> [SwiftSemanticStructureSelection] {
+        guard let file = source.file else {
+            throw SwiftSemanticSourceInspectionError.sourceFileRequired
         }
 
-        let source = try String(
-            contentsOf: file,
-            encoding: .utf8
-        )
-        let sourceFile = Parser.parse(
-            source: source
-        )
-        let mapper = SwiftSourceLineMapper(
-            source: source
-        )
         let visitor = SwiftSemanticStructureVisitor(
             file: file,
             query: query,
-            mapper: mapper
+            mapper: source.mapper
         )
 
         visitor.walk(
-            sourceFile
+            source.syntax
         )
 
         return visitor.matches()

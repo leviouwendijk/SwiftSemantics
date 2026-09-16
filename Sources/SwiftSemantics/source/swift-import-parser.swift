@@ -1,5 +1,4 @@
 import Foundation
-import SwiftParser
 import SwiftSyntax
 
 /// SwiftSyntax-backed parser for structural import declarations.
@@ -10,19 +9,20 @@ enum SwiftImportParser {
     static func imports(
         in file: URL
     ) throws -> [SwiftSemanticImport] {
-        let source = try String(
-            contentsOf: file,
-            encoding: .utf8
+        imports(
+            in: try SwiftSemanticSource(
+                file: file
+            )
         )
+    }
 
-        let tree = Parser.parse(
-            source: source
-        )
-
+    static func imports(
+        in source: SwiftSemanticSource
+    ) -> [SwiftSemanticImport] {
         let visitor = SwiftImportVisitor()
 
         visitor.walk(
-            tree
+            source.syntax
         )
 
         return visitor.imports

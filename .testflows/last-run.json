@@ -1,0 +1,148 @@
+{
+  "failed" : 0,
+  "failed_names" : [
+
+  ],
+  "generated_at" : "2026-09-16T01:28:36Z",
+  "passed" : 10,
+  "results" : [
+    {
+      "display_name" : "semantic-package-graph",
+      "duration_seconds" : 1.4141889810562134,
+      "name" : "semantic-package-graph",
+      "status" : "passed",
+      "tags" : [
+        "graph",
+        "package",
+        "swift-semantics",
+        "swiftpm",
+        "workspace"
+      ]
+    },
+    {
+      "display_name" : "semantic-import-inventory",
+      "duration_seconds" : 1.1024129390716553,
+      "name" : "semantic-import-inventory",
+      "status" : "passed",
+      "tags" : [
+        "imports",
+        "sources",
+        "swift-semantics",
+        "swift-syntax",
+        "swiftpm"
+      ]
+    },
+    {
+      "display_name" : "semantic-source-structure",
+      "duration_seconds" : 0.019959092140197754,
+      "name" : "semantic-source-structure",
+      "status" : "passed",
+      "tags" : [
+        "regression",
+        "structure",
+        "swift-semantics",
+        "swift-syntax",
+        "symbols"
+      ]
+    },
+    {
+      "display_name" : "semantic-rule-foundation",
+      "duration_seconds" : 0.0009610652923583984,
+      "name" : "semantic-rule-foundation",
+      "status" : "passed",
+      "tags" : [
+        "regression",
+        "rules",
+        "source",
+        "swift-semantics",
+        "swift-syntax"
+      ]
+    },
+    {
+      "display_name" : "authored-rules",
+      "duration_seconds" : 0.002582073211669922,
+      "name" : "authored-rules",
+      "status" : "passed",
+      "tags" : [
+        "lint",
+        "regression",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
+      "display_name" : "source-convention-rules",
+      "duration_seconds" : 0.0025049448013305664,
+      "name" : "source-convention-rules",
+      "status" : "passed",
+      "tags" : [
+        "formatting",
+        "guidelines",
+        "lint",
+        "rules",
+        "source",
+        "swift-semantics"
+      ]
+    },
+    {
+      "display_name" : "generated-rule-catalog",
+      "duration_seconds" : 0.0006719827651977539,
+      "name" : "generated-rule-catalog",
+      "status" : "passed",
+      "tags" : [
+        "catalog",
+        "generation",
+        "lint",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
+      "display_name" : "semantic-sourcekit-lsp-session",
+      "duration_seconds" : 0.5438339710235596,
+      "name" : "semantic-sourcekit-lsp-session",
+      "status" : "passed",
+      "tags" : [
+        "compiler-semantics",
+        "integration",
+        "sourcekit-lsp",
+        "swift-semantics",
+        "workspace"
+      ]
+    },
+    {
+      "display_name" : "semantic-sourcekit-lsp-operations",
+      "duration_seconds" : 19.525174975395203,
+      "name" : "semantic-sourcekit-lsp-operations",
+      "status" : "passed",
+      "tags" : [
+        "compiler-semantics",
+        "definitions",
+        "diagnostics",
+        "implementations",
+        "references",
+        "sourcekit-lsp",
+        "workspace-symbols"
+      ]
+    },
+    {
+      "display_name" : "semantic-sourcekit-lsp-advanced-operations",
+      "duration_seconds" : 19.55675196647644,
+      "name" : "semantic-sourcekit-lsp-advanced-operations",
+      "status" : "passed",
+      "tags" : [
+        "call-hierarchy",
+        "compiler-semantics",
+        "document-symbols",
+        "hover",
+        "sourcekit-lsp",
+        "symbol-identity",
+        "type-hierarchy",
+        "usr"
+      ]
+    }
+  ],
+  "skipped" : 0,
+  "title" : "SwiftSemantics flow tests",
+  "total" : 10
+}

@@ -1,5 +1,4 @@
 import Foundation
-import SwiftParser
 import SwiftSyntax
 
 /// SwiftSyntax-backed structural symbol collection.
@@ -15,39 +14,32 @@ public struct SwiftSemanticSymbolCollector:
     public func collect(
         in file: URL
     ) throws -> [SwiftSemanticSymbol] {
-        let file = file.standardizedFileURL
-
-        guard file.pathExtension == "swift" else {
-            throw SwiftSemanticSourceInspectionError.unsupportedFile(
-                file.path
+        collect(
+            in: try SwiftSemanticSource(
+                file: file
             )
-        }
-
-        let source = try String(
-            contentsOf: file,
-            encoding: .utf8
-        )
-
-        return collect(
-            source: source
         )
     }
 
     public func collect(
         source: String
     ) -> [SwiftSemanticSymbol] {
-        let sourceFile = Parser.parse(
-            source: source
+        collect(
+            in: SwiftSemanticSource(
+                source: source
+            )
         )
-        let mapper = SwiftSourceLineMapper(
-            source: source
-        )
+    }
+
+    public func collect(
+        in source: SwiftSemanticSource
+    ) -> [SwiftSemanticSymbol] {
         let visitor = SwiftSemanticSymbolVisitor(
-            mapper: mapper
+            mapper: source.mapper
         )
 
         visitor.walk(
-            sourceFile
+            source.syntax
         )
 
         return visitor.symbols()

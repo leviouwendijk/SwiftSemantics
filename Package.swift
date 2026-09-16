@@ -20,6 +20,12 @@ let package = Package(
                 "SwiftSemanticsTestFlows",
             ]
         ),
+        .executable(
+            name: "semrules",
+            targets: [
+                "SwiftSemanticRuleCatalogGenerator",
+            ]
+        ),
     ],
     dependencies: [
         .package(
@@ -40,6 +46,14 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/leviouwendijk/Position.git",
+            branch: "master"
+        ),
+        .package(
+            url: "https://github.com/leviouwendijk/Primitives.git",
+            branch: "master"
+        ),
+        .package(
+            url: "https://github.com/leviouwendijk/Macros.git",
             branch: "master"
         ),
     ],
@@ -66,6 +80,27 @@ let package = Package(
                 .product(
                     name: "Position",
                     package: "Position"
+                ),
+                .product(
+                    name: "Primitives",
+                    package: "Primitives"
+                ),
+                .product(
+                    name: "Macros",
+                    package: "Macros"
+                ),
+            ]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticRuleCatalogGenerator",
+            dependencies: [
+                .product(
+                    name: "SwiftParser",
+                    package: "swift-syntax"
+                ),
+                .product(
+                    name: "SwiftSyntax",
+                    package: "swift-syntax"
                 ),
             ]
         ),
