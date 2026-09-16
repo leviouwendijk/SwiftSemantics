@@ -5,7 +5,7 @@ import SwiftSyntax
 
 @main
 enum SwiftSemanticRuleCatalogGenerator:
-    RunnableArgumentCommand
+    ArgumentCommandFallback
 {
     private enum Mode {
         case write
@@ -41,7 +41,7 @@ enum SwiftSemanticRuleCatalogGenerator:
         ]
     }
 
-    static func run(
+    static func fallback(
         _ invocation: ParsedInvocation
     ) async throws {
         let mode: Mode = try invocation.flag(

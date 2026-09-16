@@ -4,7 +4,7 @@ import SwiftSemantics
 
 @main
 enum SwiftSemanticLintCLI:
-    RunnableArgumentCommand
+    ArgumentCommandFallback
 {
     static let name = "semlint"
 
@@ -29,7 +29,7 @@ enum SwiftSemanticLintCLI:
         ]
     }
 
-    static func run(
+    static func fallback(
         _ invocation: ParsedInvocation
     ) async throws {
         let errorsOnly = try invocation.flag(
