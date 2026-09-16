@@ -183,9 +183,9 @@ extension SwiftSemanticsFlowSuite {
             }
 
             Step(
-                "align closing delimiters with their constructs"
+                "align closing delimiters with their opening delimiters"
             ) {
-                let source = SwiftSemanticSource(
+                let invalid = SwiftSemanticSource(
                     source: """
                     func inner(one: Int) -> Int { one }
                     func outer(first: Int, second: Int) -> Int { first + second }
@@ -198,9 +198,8 @@ extension SwiftSemanticsFlowSuite {
                         )
                     """
                 )
-
-                let analysis = try await analyzeSourceConventions(
-                    source,
+                let invalidAnalysis = try await analyzeSourceConventions(
+                    invalid,
                     rules: [
                         SwiftSemanticRules.Formatting.ClosingDelimiter(),
                     ]
@@ -208,11 +207,35 @@ extension SwiftSemanticsFlowSuite {
 
                 try Expect.equal(
                     sourceConventionDiagnostics(
-                        in: analysis,
+                        in: invalidAnalysis,
                         ruleID: .closingDelimiter
                     ).count,
                     2,
                     "both misaligned closing delimiters are diagnosed"
+                )
+
+                let chained = SwiftSemanticSource(
+                    source: """
+                    let value = source
+                        .map(
+                            transform
+                        )
+                    """
+                )
+                let chainedAnalysis = try await analyzeSourceConventions(
+                    chained,
+                    rules: [
+                        SwiftSemanticRules.Formatting.ClosingDelimiter(),
+                    ]
+                )
+
+                try Expect.equal(
+                    sourceConventionDiagnostics(
+                        in: chainedAnalysis,
+                        ruleID: .closingDelimiter
+                    ).count,
+                    0,
+                    "a chained call uses the opening parenthesis line rather than the called-expression start"
                 )
             }
 
