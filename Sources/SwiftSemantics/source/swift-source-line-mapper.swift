@@ -85,7 +85,7 @@ struct SwiftSourceLineMapper:
         var utf8Offset = 0
 
         if tracker.line == line,
-           tracker.column == column
+            tracker.column == column
         {
             return utf8Offset
         }
@@ -98,7 +98,7 @@ struct SwiftSourceLineMapper:
             )
 
             if tracker.line == line,
-               tracker.column == column
+                tracker.column == column
             {
                 return utf8Offset
             }

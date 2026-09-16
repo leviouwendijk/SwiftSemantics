@@ -95,7 +95,7 @@ public struct SwiftSemanticSource:
         let utf8 = text.utf8
 
         guard offset >= 0,
-              offset <= utf8.count else {
+            offset <= utf8.count else {
             return nil
         }
 

@@ -107,7 +107,7 @@ extension SwiftSemanticWorkspace {
                 return currentProvider
 
             case .idle,
-                 .starting:
+                .starting:
                 try? await provider.shutdown()
                 throw CancellationError()
             }
@@ -116,7 +116,7 @@ extension SwiftSemanticWorkspace {
                 let currentGeneration,
                 _
             ) = compilerSessionState,
-               currentGeneration == generation
+                currentGeneration == generation
             {
                 compilerSessionState = .idle
             }

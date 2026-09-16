@@ -54,15 +54,15 @@ public extension SwiftSemanticRules.Formatting {
                 _ node: FunctionCallExprSyntax
             ) -> SyntaxVisitorContinueKind {
                 guard node.arguments.count > 1,
-                      let leftParen = node.leftParen,
-                      let rightParen = node.rightParen,
-                      let openingLine = source.lineRange(
+                    let leftParen = node.leftParen,
+                    let rightParen = node.rightParen,
+                    let openingLine = source.lineRange(
                         of: leftParen
-                      )?.start,
-                      let closingLine = source.lineRange(
+                    )?.start,
+                    let closingLine = source.lineRange(
                         of: rightParen
-                      )?.start,
-                      openingLine != closingLine else {
+                    )?.start,
+                    openingLine != closingLine else {
                     return .visitChildren
                 }
 

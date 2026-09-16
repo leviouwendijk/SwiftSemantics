@@ -14,8 +14,8 @@ public extension SwiftSemanticRules.API.Surface {
             context: SwiftSemanticRuleContext
         ) async throws -> [SwiftSemanticRuleDiagnostic] {
             guard !context.forbiddenAPIs.isEmpty,
-                  let file = source.file,
-                  let resolver = context.symbolResolver else {
+                let file = source.file,
+                let resolver = context.symbolResolver else {
                 return []
             }
 
@@ -72,7 +72,7 @@ public extension SwiftSemanticRules.API.Surface {
 
             case .system(let module, let name):
                 guard symbol.systemModuleName == module,
-                      let symbolName = symbol.name else {
+                    let symbolName = symbol.name else {
                     return false
                 }
 

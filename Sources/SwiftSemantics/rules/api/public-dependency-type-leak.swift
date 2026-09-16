@@ -14,8 +14,8 @@ public extension SwiftSemanticRules.API.Surface {
             context: SwiftSemanticRuleContext
         ) async throws -> [SwiftSemanticRuleDiagnostic] {
             guard !context.dependencySurface.isEmpty,
-                  let file = source.file,
-                  let resolver = context.symbolResolver else {
+                let file = source.file,
+                let resolver = context.symbolResolver else {
                 return []
             }
 
@@ -39,16 +39,16 @@ public extension SwiftSemanticRules.API.Surface {
                 )
                 let leaking = symbols.contains { symbol in
                     if let identifier = symbol.identifier,
-                       context.dependencySurface
-                        .forbiddenSymbolIdentifiers
-                        .contains(identifier) {
+                        context.dependencySurface
+                            .forbiddenSymbolIdentifiers
+                            .contains(identifier) {
                         return true
                     }
 
                     if let module = symbol.systemModuleName,
-                       context.dependencySurface
-                        .forbiddenSystemModules
-                        .contains(module) {
+                        context.dependencySurface
+                            .forbiddenSystemModules
+                            .contains(module) {
                         return true
                     }
 

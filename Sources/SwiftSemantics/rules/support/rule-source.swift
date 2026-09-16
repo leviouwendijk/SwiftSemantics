@@ -83,7 +83,7 @@ enum RuleSource {
         in lines: [Line]
     ) -> Line? {
         guard number > 0,
-              number <= lines.count else {
+            number <= lines.count else {
             return nil
         }
 

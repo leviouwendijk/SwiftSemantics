@@ -123,7 +123,7 @@ public extension SwiftSemanticRules.Enums {
                 _ node: EnumCaseElementSyntax
             ) -> SyntaxVisitorContinueKind {
                 if stringEnumStack.last == true,
-                   node.rawValue != nil {
+                    node.rawValue != nil {
                     nodes.append(
                         node
                     )

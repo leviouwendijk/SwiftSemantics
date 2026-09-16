@@ -22,7 +22,7 @@ public extension SwiftSemanticPackageRules.Architecture {
         ) async throws -> [SwiftSemanticPackageRuleDiagnostic] {
             graph.targets.compactMap { target in
                 if let targets,
-                   !targets.contains(target.name) {
+                    !targets.contains(target.name) {
                     return nil
                 }
 

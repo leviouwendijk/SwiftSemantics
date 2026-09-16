@@ -537,7 +537,7 @@ private extension SwiftSemanticStructureVisitor {
             }
 
             if let column = location.column,
-               column <= 0
+                column <= 0
             {
                 return
             }

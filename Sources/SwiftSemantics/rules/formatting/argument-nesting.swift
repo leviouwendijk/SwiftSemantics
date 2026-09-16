@@ -55,13 +55,13 @@ public extension SwiftSemanticRules.Formatting {
             ) -> SyntaxVisitorContinueKind {
                 for argument in node.arguments {
                     guard let label = argument.label,
-                          let labelLine = source.lineRange(
+                        let labelLine = source.lineRange(
                             of: label
-                          )?.start,
-                          let expressionLine = source.lineRange(
+                        )?.start,
+                        let expressionLine = source.lineRange(
                             of: argument.expression
-                          )?.start,
-                          expressionLine > labelLine else {
+                        )?.start,
+                        expressionLine > labelLine else {
                         continue
                     }
 

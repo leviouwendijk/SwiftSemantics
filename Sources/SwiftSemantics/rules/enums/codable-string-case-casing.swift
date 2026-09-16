@@ -69,7 +69,7 @@ public extension SwiftSemanticRules.Enums {
                     )
 
                 guard isString,
-                      isCodable else {
+                    isCodable else {
                     return .visitChildren
                 }
 

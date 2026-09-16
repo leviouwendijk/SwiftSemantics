@@ -210,7 +210,7 @@ public extension SwiftSemanticLint {
                 diagnostics
             ) {
                 guard let file = rawDiagnostic.file?.standardizedFileURL,
-                      diagnostic.lineRange != nil
+                    diagnostic.lineRange != nil
                 else {
                     continue
                 }

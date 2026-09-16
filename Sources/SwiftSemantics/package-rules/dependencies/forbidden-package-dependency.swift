@@ -20,7 +20,7 @@ public extension SwiftSemanticPackageRules.Dependencies {
         ) async throws -> [SwiftSemanticPackageRuleDiagnostic] {
             graph.declaredPackageDependencies.compactMap { dependency in
                 guard let identity = dependency.identity,
-                      identities.contains(identity) else {
+                    identities.contains(identity) else {
                     return nil
                 }
 

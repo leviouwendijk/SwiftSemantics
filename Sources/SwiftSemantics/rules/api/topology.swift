@@ -141,10 +141,10 @@ public extension SwiftSemanticRules.API.Topology {
                 )
 
                 guard !parentComponents.isEmpty,
-                      childComponents.count > parentComponents.count,
-                      childComponents.starts(
+                    childComponents.count > parentComponents.count,
+                    childComponents.starts(
                         with: parentComponents
-                      ) else {
+                    ) else {
                     return nil
                 }
 

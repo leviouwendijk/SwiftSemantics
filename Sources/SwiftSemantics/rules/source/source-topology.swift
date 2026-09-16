@@ -32,7 +32,7 @@ public extension SwiftSemanticRules.Source {
             }
 
             guard declarations.count == 1,
-                  let declaration = declarations.first else {
+                let declaration = declarations.first else {
                 return []
             }
 
@@ -45,9 +45,9 @@ public extension SwiftSemanticRules.Source {
                 .lastPathComponent
 
             guard actualStem != expectedStem,
-                  !actualStem.hasPrefix(
+                !actualStem.hasPrefix(
                     expectedStem + "+"
-                  ) else {
+                ) else {
                 return []
             }
 
@@ -93,7 +93,7 @@ public extension SwiftSemanticRules.Source {
             )
 
             guard visitor.names.count >= minimum,
-                  firstComponents.count >= minimum else {
+                firstComponents.count >= minimum else {
                 return []
             }
 
@@ -247,9 +247,9 @@ private final class TopLevelPublicNominalVisitor:
         node: some SyntaxProtocol
     ) -> SyntaxVisitorContinueKind {
         if depth == 0,
-           RuleAPISurface.isExternallyVisible(
-            modifiers
-           ) {
+            RuleAPISurface.isExternallyVisible(
+                modifiers
+            ) {
             names.append(
                 name
             )

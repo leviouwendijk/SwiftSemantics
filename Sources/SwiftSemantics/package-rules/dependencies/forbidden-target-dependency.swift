@@ -55,7 +55,7 @@ public extension SwiftSemanticPackageRules.Dependencies {
         ) -> Bool {
             forbidden.contains { relation in
                 guard relation.sourceTarget == target,
-                      relation.dependencyName == dependency.name else {
+                    relation.dependencyName == dependency.name else {
                     return false
                 }
 
