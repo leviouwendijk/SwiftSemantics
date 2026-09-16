@@ -94,13 +94,22 @@ enum SwiftSemanticLintCLI:
             )
         }
 
-        for diagnostic in diagnostics {
-            print(
-                rendered(
-                    diagnostic,
-                    root: root
+        if !diagnostics.isEmpty {
+            let renderedDiagnostics = diagnostics
+                .map { diagnostic in
+                    rendered(
+                        diagnostic,
+                        root: root
+                    )
+                }
+                .joined(
+                    separator: "\n\n"
                 )
+
+            print(
+                renderedDiagnostics
             )
+            print("")
         }
 
         let errors = diagnostics.count { diagnostic in
