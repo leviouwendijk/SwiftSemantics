@@ -71,6 +71,10 @@ let package = Package(
             branch: "master"
         ),
         .package(
+            url: "https://github.com/leviouwendijk/Excerpt.git",
+            branch: "master"
+        ),
+        .package(
             url: "https://github.com/leviouwendijk/Path.git",
             branch: "master"
         ),
@@ -107,6 +111,10 @@ let package = Package(
                     name: "Macros",
                     package: "Macros"
                 ),
+                .product(
+                    name: "Excerpt",
+                    package: "Excerpt"
+                ),
             ]
         ),
         .executableTarget(
@@ -133,6 +141,10 @@ let package = Package(
                 .product(
                     name: "ANSI",
                     package: "ANSI"
+                ),
+                .product(
+                    name: "ExcerptPresentation",
+                    package: "Excerpt"
                 ),
             ]
         ),
