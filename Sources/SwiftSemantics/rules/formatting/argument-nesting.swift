@@ -15,11 +15,10 @@ public extension SwiftSemanticRules.Formatting {
             in source: SwiftSemanticSource,
             context: SwiftSemanticRuleContext
         ) async throws -> [SwiftSemanticRuleDiagnostic] {
-            _ = context
-
             let visitor = Visitor(
                 source: source,
-                ruleID: id
+                ruleID: id,
+                maximumLineLength: context.configuration.maximumLineLength
             )
 
             visitor.walk(
@@ -34,16 +33,23 @@ public extension SwiftSemanticRules.Formatting {
         {
             private let source: SwiftSemanticSource
             private let ruleID: SwiftSemanticRuleID
+            private let maximumLineLength: UInt
+            private let lines: [RuleSource.Line]
 
             private(set) var diagnostics:
                 [SwiftSemanticRuleDiagnostic] = []
 
             init(
                 source: SwiftSemanticSource,
-                ruleID: SwiftSemanticRuleID
+                ruleID: SwiftSemanticRuleID,
+                maximumLineLength: UInt
             ) {
                 self.source = source
                 self.ruleID = ruleID
+                self.maximumLineLength = maximumLineLength
+                lines = RuleSource.lines(
+                    in: source
+                )
 
                 super.init(
                     viewMode: .sourceAccurate
@@ -62,7 +68,24 @@ public extension SwiftSemanticRules.Formatting {
                             of: argument.expression
                         ),
                         expressionRange.start > labelLine,
-                        expressionRange.start == expressionRange.end else {
+                        expressionRange.start == expressionRange.end,
+                        let labelSourceLine = RuleSource.line(
+                            labelLine,
+                            in: lines
+                        ) else {
+                        continue
+                    }
+
+                    let trailingWhitespace = labelSourceLine.text.reversed().prefix {
+                        $0 == " " || $0 == "\t"
+                    }.count
+                    let combinedLineLength =
+                        labelSourceLine.text.count
+                        - trailingWhitespace
+                        + 1
+                        + argument.expression.trimmedDescription.count
+
+                    guard UInt(combinedLineLength) <= maximumLineLength else {
                         continue
                     }
 
@@ -71,7 +94,7 @@ public extension SwiftSemanticRules.Formatting {
                             ruleID: ruleID,
                             severity: .warning,
                             message:
-                                "Keep a single-line argument expression attached to its label; do not move it beneath the label.",
+                                "Keep a single-line argument expression attached to its label when the combined line fits within the configured line-length limit.",
                             file: source.file,
                             lineRange: source.lineRange(
                                 of: argument

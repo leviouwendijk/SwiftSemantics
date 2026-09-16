@@ -12,6 +12,7 @@ public struct SwiftSemanticRuleContext:
         public let maximumNestingLineage: UInt
         public let sharedPrefixFamilySize: UInt
         public let maximumParameterCount: UInt
+        public let maximumLineLength: UInt
         public let primitiveParameterClusterSize: UInt
         public let booleanParameterClusterSize: UInt
         public let unrelatedPublicDeclarationCount: UInt
@@ -21,6 +22,7 @@ public struct SwiftSemanticRuleContext:
             maximumNestingLineage: UInt = 4,
             sharedPrefixFamilySize: UInt = 3,
             maximumParameterCount: UInt = 6,
+            maximumLineLength: UInt = 120,
             primitiveParameterClusterSize: UInt = 3,
             booleanParameterClusterSize: UInt = 2,
             unrelatedPublicDeclarationCount: UInt = 3
@@ -29,6 +31,7 @@ public struct SwiftSemanticRuleContext:
             self.maximumNestingLineage = maximumNestingLineage
             self.sharedPrefixFamilySize = sharedPrefixFamilySize
             self.maximumParameterCount = maximumParameterCount
+            self.maximumLineLength = maximumLineLength
             self.primitiveParameterClusterSize = primitiveParameterClusterSize
             self.booleanParameterClusterSize = booleanParameterClusterSize
             self.unrelatedPublicDeclarationCount = unrelatedPublicDeclarationCount

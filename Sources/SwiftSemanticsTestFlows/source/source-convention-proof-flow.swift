@@ -198,6 +198,35 @@ extension SwiftSemanticsFlowSuite {
                     label: "single-line call detached below label"
                 )
 
+                let longDetachedExpression = """
+                foo(
+                    configuration:
+                        ExtremelyLongConfigurationFactory.makeConfigurationWithAnIntentionallyLongNameThatWouldExceedTheDefaultSourceLineLengthLimitBySeveralCharacters()
+                )
+                """
+
+                try await RuleFixture(
+                    source: longDetachedExpression,
+                    expectedCount: 0
+                ).assert(
+                    rule,
+                    label: "long detached single-line expression may remain nested"
+                )
+
+                try await RuleFixture(
+                    source: longDetachedExpression,
+                    context: .init(
+                        configuration: .init(
+                            maximumLineLength: 200
+                        )
+                    ),
+                    expectedCount: 1,
+                    expectedSeverity: .warning
+                ).assert(
+                    rule,
+                    label: "configured wider line restores nesting diagnostic"
+                )
+
                 try await RuleFixture(
                     source: """
                     foo(
