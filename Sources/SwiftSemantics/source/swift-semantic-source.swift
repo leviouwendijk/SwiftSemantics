@@ -85,4 +85,52 @@ public struct SwiftSemanticSource:
                 .utf8Offset
         )
     }
+
+    public func compilerPosition(
+        of node: some SyntaxProtocol
+    ) -> SwiftSemanticPosition? {
+        let offset = node
+            .positionAfterSkippingLeadingTrivia
+            .utf8Offset
+        let utf8 = text.utf8
+
+        guard offset >= 0,
+              offset <= utf8.count else {
+            return nil
+        }
+
+        let utf8Index = utf8.index(
+            utf8.startIndex,
+            offsetBy: offset
+        )
+
+        guard let index = String.Index(
+            utf8Index,
+            within: text
+        ) else {
+            return nil
+        }
+
+        let prefix = text[..<index]
+        let line = prefix.reduce(1) { partial, character in
+            character == "\n"
+                ? partial + 1
+                : partial
+        }
+        let lineStart = prefix.lastIndex(
+            of: "\n"
+        ).map { newline in
+            text.index(
+                after: newline
+            )
+        } ?? text.startIndex
+        let utf16Column = text[lineStart..<index]
+            .utf16
+            .count + 1
+
+        return .init(
+            line: line,
+            utf16Column: utf16Column
+        )
+    }
 }

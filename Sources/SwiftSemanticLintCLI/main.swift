@@ -45,13 +45,13 @@ enum SwiftSemanticLintCLI:
             fileURLWithPath: FileManager.default.currentDirectoryPath
         )
         .standardizedFileURL
+        let workspace = SwiftSemanticWorkspace(
+            root: root
+        )
+        let defaultLibrarySelection = suppliedPaths.isEmpty
         let files: [URL]
 
-        if suppliedPaths.isEmpty {
-            let workspace = SwiftSemanticWorkspace(
-                root: root
-            )
-
+        if defaultLibrarySelection {
             files = try await workspace.swiftSourceFiles(
                 forProductKinds: [
                     .library,
@@ -71,6 +71,13 @@ enum SwiftSemanticLintCLI:
         let analyzer = SwiftSemanticRuleAnalyzer(
             ruleSet: try SwiftSemanticRuleSet.all
         )
+        let context = SwiftSemanticRuleContext(
+            sourceRole:
+                defaultLibrarySelection
+                ? .library
+                : .unspecified,
+            symbolResolver: workspace
+        )
         var diagnostics: [SwiftSemanticRuleDiagnostic] = []
 
         for file in files {
@@ -78,7 +85,8 @@ enum SwiftSemanticLintCLI:
                 file: file
             )
             let analysis = try await analyzer.analyze(
-                source
+                source,
+                context: context
             )
 
             diagnostics.append(

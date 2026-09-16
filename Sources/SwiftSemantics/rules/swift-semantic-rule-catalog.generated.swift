@@ -6,13 +6,28 @@ public extension SwiftSemanticRuleSet {
         get throws {
             try Self(
                 rules: [
+                    SwiftSemanticRules.API.Surface.BooleanParameterCluster(),
+                    SwiftSemanticRules.API.Surface.ExcessiveParameterCount(),
+                    SwiftSemanticRules.API.Surface.ForbiddenSemanticAPIUsage(),
+                    SwiftSemanticRules.API.Surface.PrimitiveParameterCluster(),
+                    SwiftSemanticRules.API.Surface.PublicAnyType(),
+                    SwiftSemanticRules.API.Surface.PublicDependencyTypeLeak(),
+                    SwiftSemanticRules.API.Surface.PublicTupleReturn(),
+                    SwiftSemanticRules.API.Topology.ExcessiveSymbolComponents(),
+                    SwiftSemanticRules.API.Topology.ExcessiveTypeNesting(),
+                    SwiftSemanticRules.API.Topology.RedundantNestedTypePrefix(),
+                    SwiftSemanticRules.API.Topology.SharedSymbolPrefixFamily(),
                     SwiftSemanticRules.API.ValidateMethod(),
+                    SwiftSemanticRules.Enums.CodableStringCaseCasing(),
                     SwiftSemanticRules.Enums.RedundantStringRawValue(),
                     SwiftSemanticRules.Formatting.ArgumentNesting(),
                     SwiftSemanticRules.Formatting.ClosingDelimiter(),
                     SwiftSemanticRules.Formatting.Indentation(),
                     SwiftSemanticRules.Formatting.VerticalArguments(),
+                    SwiftSemanticRules.Source.LibraryPrint(),
                     SwiftSemanticRules.Source.NoEmoji(),
+                    SwiftSemanticRules.Source.PrimaryDeclarationFilename(),
+                    SwiftSemanticRules.Source.UnrelatedPublicDeclarations(),
                     SwiftSemanticRules.Traps.ForceTry(),
                     SwiftSemanticRules.Traps.ForceUnwrap(),
                 ]

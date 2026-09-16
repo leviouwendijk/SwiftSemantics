@@ -14,6 +14,8 @@ enum SwiftSemanticsFlowSuite:
         semanticRuleFoundationFlow,
         authoredRulesFlow,
         sourceConventionRulesFlow,
+        designConventionRulesFlow,
+        architectureRulesFlow,
         generatedRuleCatalogFlow,
         sourceKitLSPSessionFlow,
         sourceKitLSPSemanticsFlow,

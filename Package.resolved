@@ -1,5 +1,5 @@
 {
-  "originHash" : "01e8761253f240266870c0fddbb662aa613c8f5c456a43522d36bd70ce09fd12",
+  "originHash" : "d91ed5b7b22d6ab90e107479e9896c2609b2cd3bea85e5da3da3b3e5b1b2b419",
   "pins" : [
     {
       "identity" : "ansi",
@@ -151,7 +151,7 @@
       "location" : "https://github.com/leviouwendijk/Primitives.git",
       "state" : {
         "branch" : "master",
-        "revision" : "e626fa0746aee024729bf56549e774d13aa17099"
+        "revision" : "03f80f4df2eab71c69de01e5b0e43f786c8abaad"
       }
     },
     {

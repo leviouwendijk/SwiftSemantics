@@ -26,4 +26,21 @@ public extension SwiftSemanticRuleID {
     static var noEmoji: Self
     static var forbiddenTargetDependency: Self
     static var forbiddenPackageDependency: Self
+    static var excessiveSymbolComponents: Self
+    static var sharedSymbolPrefixFamily: Self
+    static var redundantNestedTypePrefix: Self
+    static var excessiveTypeNesting: Self
+    static var publicTupleReturn: Self
+    static var publicAnyType: Self
+    static var primitiveParameterCluster: Self
+    static var booleanParameterCluster: Self
+    static var excessiveParameterCount: Self
+    static var primaryDeclarationFilename: Self
+    static var unrelatedPublicDeclarations: Self
+    static var codableStringEnumCaseCasing: Self
+    static var libraryPrint: Self
+    static var forbiddenSemanticAPIUsage: Self
+    static var publicDependencyTypeLeak: Self
+    static var targetDependencyLayering: Self
+    static var targetDependencyBudget: Self
 }

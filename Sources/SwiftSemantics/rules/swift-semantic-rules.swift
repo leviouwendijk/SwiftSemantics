@@ -5,7 +5,12 @@
 public enum SwiftSemanticRules {
     public enum Traps {}
     public enum Enums {}
-    public enum API {}
+
+    public enum API {
+        public enum Topology {}
+        public enum Surface {}
+    }
+
     public enum Formatting {}
     public enum Source {}
 }
