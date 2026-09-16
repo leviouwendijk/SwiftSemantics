@@ -3,12 +3,12 @@
   "failed_names" : [
 
   ],
-  "generated_at" : "2026-09-16T01:28:36Z",
-  "passed" : 10,
+  "generated_at" : "2026-09-16T09:51:48Z",
+  "passed" : 11,
   "results" : [
     {
       "display_name" : "semantic-package-graph",
-      "duration_seconds" : 1.4141889810562134,
+      "duration_seconds" : 1.5642480850219727,
       "name" : "semantic-package-graph",
       "status" : "passed",
       "tags" : [
@@ -20,8 +20,23 @@
       ]
     },
     {
+      "display_name" : "semantic-package-rules",
+      "duration_seconds" : 0.0005398988723754883,
+      "name" : "semantic-package-rules",
+      "status" : "passed",
+      "tags" : [
+        "architecture",
+        "dependencies",
+        "lint",
+        "package",
+        "rules",
+        "swift-semantics",
+        "swiftpm"
+      ]
+    },
+    {
       "display_name" : "semantic-import-inventory",
-      "duration_seconds" : 1.1024129390716553,
+      "duration_seconds" : 1.00770103931427,
       "name" : "semantic-import-inventory",
       "status" : "passed",
       "tags" : [
@@ -34,7 +49,7 @@
     },
     {
       "display_name" : "semantic-source-structure",
-      "duration_seconds" : 0.019959092140197754,
+      "duration_seconds" : 0.019289016723632812,
       "name" : "semantic-source-structure",
       "status" : "passed",
       "tags" : [
@@ -47,7 +62,7 @@
     },
     {
       "display_name" : "semantic-rule-foundation",
-      "duration_seconds" : 0.0009610652923583984,
+      "duration_seconds" : 0.0008629560470581055,
       "name" : "semantic-rule-foundation",
       "status" : "passed",
       "tags" : [
@@ -60,7 +75,7 @@
     },
     {
       "display_name" : "authored-rules",
-      "duration_seconds" : 0.002582073211669922,
+      "duration_seconds" : 0.002552032470703125,
       "name" : "authored-rules",
       "status" : "passed",
       "tags" : [
@@ -72,7 +87,7 @@
     },
     {
       "display_name" : "source-convention-rules",
-      "duration_seconds" : 0.0025049448013305664,
+      "duration_seconds" : 0.0023380517959594727,
       "name" : "source-convention-rules",
       "status" : "passed",
       "tags" : [
@@ -86,7 +101,7 @@
     },
     {
       "display_name" : "generated-rule-catalog",
-      "duration_seconds" : 0.0006719827651977539,
+      "duration_seconds" : 0.0006780624389648438,
       "name" : "generated-rule-catalog",
       "status" : "passed",
       "tags" : [
@@ -99,7 +114,7 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-session",
-      "duration_seconds" : 0.5438339710235596,
+      "duration_seconds" : 0.5898309946060181,
       "name" : "semantic-sourcekit-lsp-session",
       "status" : "passed",
       "tags" : [
@@ -112,7 +127,7 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-operations",
-      "duration_seconds" : 19.525174975395203,
+      "duration_seconds" : 20.412036061286926,
       "name" : "semantic-sourcekit-lsp-operations",
       "status" : "passed",
       "tags" : [
@@ -127,7 +142,7 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-advanced-operations",
-      "duration_seconds" : 19.55675196647644,
+      "duration_seconds" : 24.832074999809265,
       "name" : "semantic-sourcekit-lsp-advanced-operations",
       "status" : "passed",
       "tags" : [
@@ -144,5 +159,5 @@
   ],
   "skipped" : 0,
   "title" : "SwiftSemantics flow tests",
-  "total" : 10
+  "total" : 11
 }

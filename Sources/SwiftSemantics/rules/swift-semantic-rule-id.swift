@@ -24,4 +24,6 @@ public extension SwiftSemanticRuleID {
     static var argumentNesting: Self
     static var closingDelimiter: Self
     static var noEmoji: Self
+    static var forbiddenTargetDependency: Self
+    static var forbiddenPackageDependency: Self
 }
