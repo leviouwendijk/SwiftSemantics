@@ -1,4 +1,6 @@
 import Foundation
+import Macros
+import Schema
 
 /// Compiler-resolved symbol kind.
 ///
@@ -13,6 +15,7 @@ public typealias SwiftSemanticCompilerSymbolKind =
 /// Unlike `SwiftSemanticSymbol.id`, which is deliberately structural and
 /// source-derived, `identifier` is the compiler USR returned by SourceKit-LSP
 /// when one is available.
+@JSONSchema
 public struct SwiftSemanticCompilerSymbol:
     Sendable,
     Codable,

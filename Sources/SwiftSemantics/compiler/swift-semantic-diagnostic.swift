@@ -1,5 +1,8 @@
 import Foundation
+import Macros
+import Schema
 
+@JSONSchema
 public enum SwiftSemanticDiagnosticSeverity:
     Sendable,
     Codable,
@@ -13,6 +16,7 @@ public enum SwiftSemanticDiagnosticSeverity:
 }
 
 /// One compiler diagnostic projected out of SourceKit-LSP.
+@JSONSchema
 public struct SwiftSemanticDiagnostic:
     Sendable,
     Codable,

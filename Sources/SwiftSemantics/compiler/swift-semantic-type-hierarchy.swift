@@ -1,5 +1,8 @@
 import Foundation
+import Macros
+import Schema
 
+@JSONSchema
 public struct SwiftSemanticTypeHierarchyItem:
     Sendable,
     Codable,

@@ -3,12 +3,12 @@
   "failed_names" : [
 
   ],
-  "generated_at" : "2026-09-16T09:51:48Z",
-  "passed" : 11,
+  "generated_at" : "2026-09-16T19:03:11Z",
+  "passed" : 19,
   "results" : [
     {
       "display_name" : "semantic-package-graph",
-      "duration_seconds" : 1.5642480850219727,
+      "duration_seconds" : 1.558487057685852,
       "name" : "semantic-package-graph",
       "status" : "passed",
       "tags" : [
@@ -21,7 +21,7 @@
     },
     {
       "display_name" : "semantic-package-rules",
-      "duration_seconds" : 0.0005398988723754883,
+      "duration_seconds" : 0.0010210275650024414,
       "name" : "semantic-package-rules",
       "status" : "passed",
       "tags" : [
@@ -35,8 +35,23 @@
       ]
     },
     {
+      "display_name" : "semantic-package-dependency-proof-matrix",
+      "duration_seconds" : 0.0004210472106933594,
+      "name" : "semantic-package-dependency-proof-matrix",
+      "status" : "passed",
+      "tags" : [
+        "boundaries",
+        "dependencies",
+        "fixtures",
+        "package",
+        "regression",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
       "display_name" : "semantic-import-inventory",
-      "duration_seconds" : 1.00770103931427,
+      "duration_seconds" : 1.6779780387878418,
       "name" : "semantic-import-inventory",
       "status" : "passed",
       "tags" : [
@@ -49,7 +64,7 @@
     },
     {
       "display_name" : "semantic-source-structure",
-      "duration_seconds" : 0.019289016723632812,
+      "duration_seconds" : 0.019999980926513672,
       "name" : "semantic-source-structure",
       "status" : "passed",
       "tags" : [
@@ -62,7 +77,7 @@
     },
     {
       "display_name" : "semantic-rule-foundation",
-      "duration_seconds" : 0.0008629560470581055,
+      "duration_seconds" : 0.0014090538024902344,
       "name" : "semantic-rule-foundation",
       "status" : "passed",
       "tags" : [
@@ -75,7 +90,7 @@
     },
     {
       "display_name" : "authored-rules",
-      "duration_seconds" : 0.002552032470703125,
+      "duration_seconds" : 0.002798914909362793,
       "name" : "authored-rules",
       "status" : "passed",
       "tags" : [
@@ -86,8 +101,22 @@
       ]
     },
     {
+      "display_name" : "semantic-authored-rule-proof-matrix",
+      "duration_seconds" : 0.003921031951904297,
+      "name" : "semantic-authored-rule-proof-matrix",
+      "status" : "passed",
+      "tags" : [
+        "boundaries",
+        "fixtures",
+        "lint",
+        "regression",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
       "display_name" : "source-convention-rules",
-      "duration_seconds" : 0.0023380517959594727,
+      "duration_seconds" : 0.002520918846130371,
       "name" : "source-convention-rules",
       "status" : "passed",
       "tags" : [
@@ -100,8 +129,95 @@
       ]
     },
     {
+      "display_name" : "semantic-source-convention-proof-matrix",
+      "duration_seconds" : 0.0052520036697387695,
+      "name" : "semantic-source-convention-proof-matrix",
+      "status" : "passed",
+      "tags" : [
+        "boundaries",
+        "fixtures",
+        "formatting",
+        "lint",
+        "regression",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
+      "display_name" : "semantic-design-convention-rules",
+      "duration_seconds" : 0.004034996032714844,
+      "name" : "semantic-design-convention-rules",
+      "status" : "passed",
+      "tags" : [
+        "api",
+        "architecture",
+        "lint",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
+      "display_name" : "semantic-design-convention-proof-matrix",
+      "duration_seconds" : 0.010449051856994629,
+      "name" : "semantic-design-convention-proof-matrix",
+      "status" : "passed",
+      "tags" : [
+        "api",
+        "architecture",
+        "boundaries",
+        "fixtures",
+        "lint",
+        "regression",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
+      "display_name" : "semantic-architecture-rules",
+      "duration_seconds" : 0.000576019287109375,
+      "name" : "semantic-architecture-rules",
+      "status" : "passed",
+      "tags" : [
+        "architecture",
+        "dependencies",
+        "package",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
+      "display_name" : "semantic-architecture-proof-matrix",
+      "duration_seconds" : 0.00042307376861572266,
+      "name" : "semantic-architecture-proof-matrix",
+      "status" : "passed",
+      "tags" : [
+        "architecture",
+        "boundaries",
+        "dependencies",
+        "fixtures",
+        "package",
+        "regression",
+        "rules",
+        "swift-semantics"
+      ]
+    },
+    {
+      "display_name" : "semantic-lint-presentation",
+      "duration_seconds" : 0.0028579235076904297,
+      "name" : "semantic-lint-presentation",
+      "status" : "passed",
+      "tags" : [
+        "lint",
+        "presentation",
+        "projection",
+        "regression",
+        "result",
+        "swift-semantics"
+      ]
+    },
+    {
       "display_name" : "generated-rule-catalog",
-      "duration_seconds" : 0.0006780624389648438,
+      "duration_seconds" : 0.0009059906005859375,
       "name" : "generated-rule-catalog",
       "status" : "passed",
       "tags" : [
@@ -114,7 +230,7 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-session",
-      "duration_seconds" : 0.5898309946060181,
+      "duration_seconds" : 1.399480938911438,
       "name" : "semantic-sourcekit-lsp-session",
       "status" : "passed",
       "tags" : [
@@ -127,7 +243,7 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-operations",
-      "duration_seconds" : 20.412036061286926,
+      "duration_seconds" : 17.21006405353546,
       "name" : "semantic-sourcekit-lsp-operations",
       "status" : "passed",
       "tags" : [
@@ -142,7 +258,7 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-advanced-operations",
-      "duration_seconds" : 24.832074999809265,
+      "duration_seconds" : 18.034337997436523,
       "name" : "semantic-sourcekit-lsp-advanced-operations",
       "status" : "passed",
       "tags" : [
@@ -159,5 +275,5 @@
   ],
   "skipped" : 0,
   "title" : "SwiftSemantics flow tests",
-  "total" : 11
+  "total" : 19
 }

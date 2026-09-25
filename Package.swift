@@ -59,6 +59,10 @@ let package = Package(
             branch: "master"
         ),
         .package(
+            url: "https://github.com/leviouwendijk/Schema.git",
+            branch: "master"
+        ),
+        .package(
             url: "https://github.com/leviouwendijk/Macros.git",
             branch: "master"
         ),
@@ -106,6 +110,10 @@ let package = Package(
                 .product(
                     name: "Primitives",
                     package: "Primitives"
+                ),
+                .product(
+                    name: "Schema",
+                    package: "Schema"
                 ),
                 .product(
                     name: "Macros",
@@ -183,3 +191,22 @@ let package = Package(
         .v6,
     ]
 )
+
+for target in package.targets {
+    switch target.type {
+    case .regular, .executable, .test, .macro:
+        var settings = target.swiftSettings ?? []
+
+        settings.append(
+            .treatAllWarnings(as: .error)
+        )
+
+        target.swiftSettings = settings
+
+    case .plugin, .system, .binary:
+        break
+
+    @unknown default:
+        break
+    }
+}

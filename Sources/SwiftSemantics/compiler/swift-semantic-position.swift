@@ -1,4 +1,6 @@
 import Foundation
+import Macros
+import Schema
 
 /// A compiler-semantic source position.
 ///
@@ -7,6 +9,7 @@ import Foundation
 /// operations use UTF-16 positions by default. It is intentionally distinct
 /// from structural `SwiftSemanticSourceLocation`, whose column follows
 /// Position/Unicode-scalar semantics.
+@JSONSchema
 public struct SwiftSemanticPosition:
     Sendable,
     Codable,
@@ -25,6 +28,7 @@ public struct SwiftSemanticPosition:
 }
 
 /// One compiler-semantic source range.
+@JSONSchema
 public struct SwiftSemanticRange:
     Sendable,
     Codable,
@@ -46,6 +50,7 @@ public struct SwiftSemanticRange:
 ///
 /// URI is used instead of file URL because SourceKit-LSP may also return
 /// generated interfaces using non-file schemes.
+@JSONSchema
 public struct SwiftSemanticLocation:
     Sendable,
     Codable,

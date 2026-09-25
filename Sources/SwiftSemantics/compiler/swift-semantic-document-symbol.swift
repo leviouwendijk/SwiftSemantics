@@ -1,4 +1,5 @@
 import Foundation
+import Schema
 
 /// One compiler-aware symbol in a document outline.
 ///
@@ -33,3 +34,46 @@ public struct SwiftSemanticDocumentSymbol:
         self.children = children
     }
 }
+
+extension SwiftSemanticDocumentSymbol:
+    JSONSchemaProviding
+{
+    public static var jsonschema: JSONSchema {
+        JSONSchema.object(
+            description: "One compiler-aware symbol in a document outline."
+        ) {
+            JSONSchema.string(
+                "name",
+                required: true
+            )
+            JSONSchema.property(
+                "detail",
+                schema: String.jsonschema,
+                required: false
+            )
+            JSONSchema.property(
+                "kind",
+                schema: SwiftSemanticCompilerSymbolKind.jsonschema,
+                required: true
+            )
+            JSONSchema.property(
+                "location",
+                schema: SwiftSemanticLocation.jsonschema,
+                required: true
+            )
+            JSONSchema.property(
+                "selectionRange",
+                schema: SwiftSemanticRange.jsonschema,
+                required: true
+            )
+            JSONSchema.array(
+                "children",
+                required: true,
+                description:
+                    "Recursive child document symbols. Child payloads use the same Codable shape as SwiftSemanticDocumentSymbol.",
+                items: .any
+            )
+        }
+    }
+}
+

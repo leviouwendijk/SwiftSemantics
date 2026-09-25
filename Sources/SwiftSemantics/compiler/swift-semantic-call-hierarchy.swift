@@ -1,5 +1,8 @@
 import Foundation
+import Macros
+import Schema
 
+@JSONSchema
 public struct SwiftSemanticCallHierarchyItem:
     Sendable,
     Codable,
@@ -26,6 +29,7 @@ public struct SwiftSemanticCallHierarchyItem:
     }
 }
 
+@JSONSchema
 public struct SwiftSemanticIncomingCall:
     Sendable,
     Codable,
@@ -43,6 +47,7 @@ public struct SwiftSemanticIncomingCall:
     }
 }
 
+@JSONSchema
 public struct SwiftSemanticOutgoingCall:
     Sendable,
     Codable,

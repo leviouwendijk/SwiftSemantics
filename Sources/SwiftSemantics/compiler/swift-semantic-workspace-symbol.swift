@@ -1,5 +1,8 @@
 import Foundation
+import Macros
+import Schema
 
+@JSONSchema
 public enum SwiftSemanticWorkspaceSymbolKind:
     Sendable,
     Codable,
@@ -35,6 +38,7 @@ public enum SwiftSemanticWorkspaceSymbolKind:
 }
 
 /// One symbol discovered by the compiler-semantic workspace index.
+@JSONSchema
 public struct SwiftSemanticWorkspaceSymbol:
     Sendable,
     Codable,

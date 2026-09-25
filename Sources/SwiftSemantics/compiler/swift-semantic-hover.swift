@@ -1,3 +1,7 @@
+import Macros
+import Schema
+
+@JSONSchema
 public enum SwiftSemanticHoverFormat:
     String,
     Sendable,
@@ -14,6 +18,7 @@ public enum SwiftSemanticHoverFormat:
 /// `contents` intentionally remains rendered text. SwiftSemantics does not
 /// interpret Markdown or declaration markup; higher interfaces may choose how
 /// to present it.
+@JSONSchema
 public struct SwiftSemanticHover:
     Sendable,
     Codable,
