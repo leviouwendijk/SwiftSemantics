@@ -27,6 +27,10 @@ enum SwiftSemanticLintCLI:
                 "report-only",
                 help: "Report diagnostics without returning a lint-enforcement failure."
             ),
+            flag(
+                "require-semicolons",
+                help: "Require explicit semicolon termination for Swift declarations and statements."
+            ),
             opt(
                 "format",
                 as: String.self,
@@ -50,6 +54,9 @@ enum SwiftSemanticLintCLI:
         )
         let reportOnly = try invocation.flag(
             "report-only"
+        )
+        let requireSemicolons = try invocation.flag(
+            "require-semicolons"
         )
         let format = try SemanticLintOutputFormat(
             argument: invocation.value(
@@ -92,6 +99,9 @@ enum SwiftSemanticLintCLI:
             ruleSet: try SwiftSemanticRuleSet.all
         )
         let context = SwiftSemanticRuleContext(
+            configuration: .init(
+                requireSemicolons: requireSemicolons
+            ),
             sourceRole:
                 defaultLibrarySelection
                 ? .library

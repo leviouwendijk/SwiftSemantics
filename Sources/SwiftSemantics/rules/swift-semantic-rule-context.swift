@@ -16,6 +16,7 @@ public struct SwiftSemanticRuleContext:
         public let primitiveParameterClusterSize: UInt
         public let booleanParameterClusterSize: UInt
         public let unrelatedPublicDeclarationCount: UInt
+        public let requireSemicolons: Bool
 
         public init(
             maximumSymbolComponents: UInt = 3,
@@ -25,7 +26,8 @@ public struct SwiftSemanticRuleContext:
             maximumLineLength: UInt = 120,
             primitiveParameterClusterSize: UInt = 3,
             booleanParameterClusterSize: UInt = 2,
-            unrelatedPublicDeclarationCount: UInt = 3
+            unrelatedPublicDeclarationCount: UInt = 3,
+            requireSemicolons: Bool = false
         ) {
             self.maximumSymbolComponents = maximumSymbolComponents
             self.maximumNestingLineage = maximumNestingLineage
@@ -35,6 +37,7 @@ public struct SwiftSemanticRuleContext:
             self.primitiveParameterClusterSize = primitiveParameterClusterSize
             self.booleanParameterClusterSize = booleanParameterClusterSize
             self.unrelatedPublicDeclarationCount = unrelatedPublicDeclarationCount
+            self.requireSemicolons = requireSemicolons
         }
     }
 

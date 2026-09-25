@@ -240,6 +240,121 @@ extension SwiftSemanticsFlowSuite {
             }
 
             Step(
+                "leave semicolon termination disabled by default"
+            ) {
+                let source = SwiftSemanticSource(
+                    source: """
+                    import Foundation
+                    struct Container {
+                        let value = 1
+                        func read() -> Int {
+                            return value
+                        }
+                    }
+                    """
+                )
+                let analysis = try await analyzeSourceConventions(
+                    source,
+                    rules: [
+                        SwiftSemanticRules.Formatting.SemicolonTermination(),
+                    ]
+                )
+
+                try Expect.equal(
+                    sourceConventionDiagnostics(
+                        in: analysis,
+                        ruleID: .semicolonTermination
+                    ).count,
+                    0,
+                    "semicolon termination remains disabled by default"
+                )
+            }
+
+            Step(
+                "require explicit semicolon termination when enabled"
+            ) {
+                let valid = SwiftSemanticSource(
+                    source: """
+                    import Foundation;
+                    struct Container {
+                        let value = 1;
+                        func read() -> Int {
+                            if value > 0 {
+                                return value;
+                            };
+                            return 0;
+                        };
+                    };
+                    let result = Container().read();
+                    """
+                )
+                let validAnalysis = try await analyzeSourceConventions(
+                    valid,
+                    rules: [
+                        SwiftSemanticRules.Formatting.SemicolonTermination(),
+                    ],
+                    context: .init(
+                        configuration: .init(
+                            requireSemicolons: true
+                        )
+                    )
+                )
+
+                try Expect.equal(
+                    sourceConventionDiagnostics(
+                        in: validAnalysis,
+                        ruleID: .semicolonTermination
+                    ).count,
+                    0,
+                    "semicolon-terminated declarations, statements, and block items remain valid"
+                )
+
+                let invalid = SwiftSemanticSource(
+                    source: """
+                    import Foundation
+                    struct Container {
+                        let value = 1
+                        func read() -> Int {
+                            if value > 0 {
+                                return value
+                            }
+                            return 0
+                        }
+                    }
+                    let result = Container().read()
+                    """
+                )
+                let invalidAnalysis = try await analyzeSourceConventions(
+                    invalid,
+                    rules: [
+                        SwiftSemanticRules.Formatting.SemicolonTermination(),
+                    ],
+                    context: .init(
+                        configuration: .init(
+                            requireSemicolons: true
+                        )
+                    )
+                )
+                let diagnostics = sourceConventionDiagnostics(
+                    in: invalidAnalysis,
+                    ruleID: .semicolonTermination
+                )
+
+                try Expect.equal(
+                    diagnostics.count,
+                    8,
+                    "imports, declarations, members, statements, and block-form items require semicolons"
+                )
+
+                try Expect.true(
+                    diagnostics.allSatisfy { diagnostic in
+                        diagnostic.severity == .error
+                    },
+                    "semicolon termination diagnostics are errors"
+                )
+            }
+
+            Step(
                 "source convention warnings remain explicitly suppressible"
             ) {
                 let source = SwiftSemanticSource(
@@ -272,7 +387,8 @@ extension SwiftSemanticsFlowSuite {
 
 private func analyzeSourceConventions(
     _ source: SwiftSemanticSource,
-    rules: [any SwiftSemanticRule]
+    rules: [any SwiftSemanticRule],
+    context: SwiftSemanticRuleContext = .init()
 ) async throws -> SwiftSemanticRuleAnalysis {
     let ruleSet = try SwiftSemanticRuleSet(
         rules: rules
@@ -282,7 +398,8 @@ private func analyzeSourceConventions(
         ruleSet: ruleSet
     )
     .analyze(
-        source
+        source,
+        context: context
     )
 }
 

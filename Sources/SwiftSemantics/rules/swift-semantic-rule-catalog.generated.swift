@@ -23,6 +23,7 @@ public extension SwiftSemanticRuleSet {
                     SwiftSemanticRules.Formatting.ArgumentNesting(),
                     SwiftSemanticRules.Formatting.ClosingDelimiter(),
                     SwiftSemanticRules.Formatting.Indentation(),
+                    SwiftSemanticRules.Formatting.SemicolonTermination(),
                     SwiftSemanticRules.Formatting.VerticalArguments(),
                     SwiftSemanticRules.Source.LibraryPrint(),
                     SwiftSemanticRules.Source.NoEmoji(),
