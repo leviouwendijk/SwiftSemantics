@@ -27,6 +27,12 @@ let package = Package(
             ]
         ),
         .executable(
+            name: "semlsp",
+            targets: [
+                "SwiftSemanticLintLSP",
+            ]
+        ),
+        .executable(
             name: "semlint",
             targets: [
                 "SwiftSemanticLintCLI",
@@ -154,6 +160,12 @@ let package = Package(
                     name: "ExcerptPresentation",
                     package: "Excerpt"
                 ),
+            ]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticLintLSP",
+            dependencies: [
+                "SwiftSemantics",
             ]
         ),
         .executableTarget(

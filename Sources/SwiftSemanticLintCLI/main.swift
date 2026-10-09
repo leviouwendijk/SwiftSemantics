@@ -6,9 +6,7 @@ import SwiftSemanticLintPresentation
 import SwiftSemantics
 
 @main
-enum SwiftSemanticLintCLI:
-    ArgumentCommandFallback
-{
+enum SwiftSemanticLintCLI: ArgumentCommandFallback {
     static let name = "semlint"
 
     static func main() async {
@@ -189,7 +187,9 @@ private enum SemanticLintOutputFormat:
     init(
         argument: String
     ) throws {
-        guard let value = Self(rawValue: argument) else {
+        guard 
+            let value = Self(rawValue: argument) 
+        else {
             throw SemanticLintCLIError.unsupportedFormat(
                 argument
             )
@@ -221,8 +221,10 @@ private func swiftFiles(
     )
     let files: [URL] = scan.matches.compactMap {
         (match: PathScanMatch) -> URL? in
-        guard match.type == .file,
-              match.url.pathExtension == "swift" else {
+        guard 
+            match.type == .file,
+            match.url.pathExtension == "swift" 
+        else {
             return nil
         }
 

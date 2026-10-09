@@ -1,0 +1,19 @@
+uuid = "B694EB87-FCC9-49E4-90DF-C09E49A95869"
+name = "SwiftSemantics"
+types {
+    "binary"
+}
+versions {
+    release {
+        major = 0
+        minor = 1
+        patch = 0
+    }
+}
+compile {
+    use = true
+    arguments { "--products" "semlint" "semlsp" }
+}
+details = ""
+author = "levi"
+update = "https://raw.githubusercontent.com/leviouwendijk/SwiftSemantics/master/build-object.pkl"
