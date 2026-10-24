@@ -123,6 +123,17 @@ extension SourceKitLSPProvider {
         }
     }
 
+    func callHierarchyItem(
+        in file: URL,
+        at position: SwiftSemanticPosition
+    ) async throws -> SwiftSemanticCallHierarchyItem? {
+        guard let item = try await preparedCallHierarchyItem(
+            in: file,
+            at: position
+        ) else { return nil }
+        return try semanticCallHierarchyItem(item)
+    }
+
     func incomingCalls(
         in file: URL,
         at position: SwiftSemanticPosition

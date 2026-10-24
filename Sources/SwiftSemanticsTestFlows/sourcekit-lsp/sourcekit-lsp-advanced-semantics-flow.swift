@@ -186,6 +186,36 @@ extension SwiftSemanticsFlowSuite {
                         "caller has leaf as an outgoing call"
                     )
 
+                    let callGraph: SwiftSemanticCallGraph = try await eventuallyAdvanced(
+                        label: "compiler call graph"
+                    ) {
+                        guard let value = try await workspace.callGraph(
+                            in: fixture.symbolsFile,
+                            at: .init(line: 20, utf16Column: 13),
+                            limits: try .init(
+                                maximum_depth: 1,
+                                maximum_expanded_symbols: 6
+                            )
+                        ) else { return nil }
+                        return value.graph.edges.contains {
+                            $0.destination != value.root
+                        } ? value : nil
+                    }
+                    try Expect.true(
+                        callGraph.graph.nodes.contains {
+                            $0.value.name.contains("leaf")
+                        },
+                        "compiler graph contains callee"
+                    )
+                    try Expect.true(
+                        !callGraph.is_complete,
+                        "depth-limited graph exposes its unexpanded frontier"
+                    )
+                    try Expect.true(
+                        Array(try callGraph.call_paths().walk()).count >= 2,
+                        "compiler graph projects into a call-path tree"
+                    )
+
                     let subtypes = try await eventuallyAdvanced(
                         label: "type hierarchy subtypes"
                     ) {

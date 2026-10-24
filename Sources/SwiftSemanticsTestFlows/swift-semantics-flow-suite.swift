@@ -26,5 +26,7 @@ enum SwiftSemanticsFlowSuite:
         sourceKitLSPSessionFlow,
         sourceKitLSPSemanticsFlow,
         sourceKitLSPAdvancedSemanticsFlow,
+        callGraphStructureFlow,
+        callGraphDifferenceFlow,
     ]
 }

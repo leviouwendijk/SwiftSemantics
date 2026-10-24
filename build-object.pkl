@@ -14,6 +14,9 @@ compile {
     use = true
     arguments { "--products" "semlint" "semlsp" }
 }
+tests {
+    primary = "t_semantics"
+}
 details = ""
 author = "levi"
 update = "https://raw.githubusercontent.com/leviouwendijk/SwiftSemantics/master/build-object.pkl"

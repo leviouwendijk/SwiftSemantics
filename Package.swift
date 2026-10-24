@@ -15,7 +15,7 @@ let package = Package(
             ]
         ),
         .executable(
-            name: "semtest",
+            name: "t_semantics",
             targets: [
                 "SwiftSemanticsTestFlows",
             ]
@@ -62,6 +62,10 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/leviouwendijk/Primitives.git",
+            branch: "master"
+        ),
+        .package(
+            url: "https://github.com/leviouwendijk/Difference.git",
             branch: "master"
         ),
         .package(
@@ -192,6 +196,10 @@ let package = Package(
             dependencies: [
                 "SwiftSemantics",
                 "SwiftSemanticLintPresentation",
+                .product(
+                    name: "Difference",
+                    package: "Difference"
+                ),
                 .product(
                     name: "TestFlows",
                     package: "TestFlows"
