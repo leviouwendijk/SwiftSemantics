@@ -8,6 +8,36 @@ import Writers
 extension SwiftSemanticsFlowSuite {
     static var refactoringPublicationPreparationFlow: TestFlow {
         TestFlow("swift-refactoring-writers-preparation", tags: ["refactoring", "publication"]) {
+            Step("capture selected sources via authorized Paths and Writers reader") {
+                let fixture = try publicationFixture()
+                defer { try? FileManager.default.removeItem(at: fixture.root) }
+                let writer = try WorkspaceWriter(root: fixture.root)
+                let sourceFiles = fixture.package.files.keys.filter {
+                    $0.pathExtension == "swift"
+                }
+                let captured = try SwiftRefactoringWorkspaceSources().capture(
+                    sourceFiles: sourceFiles,
+                    in: writer
+                )
+                try Expect.equal(
+                    captured.files,
+                    fixture.package.files,
+                    "captured exact package bytes through Writers"
+                )
+                let restored = SwiftRefactoringPublicationSnapshot(package: captured)
+                try restored.requireCurrent(in: writer)
+                try Data("public let stable = 2\n".utf8).write(
+                    to: fixture.root.appendingPathComponent("Sources/Core/Stable.swift")
+                )
+                var rejected = false
+                do {
+                    try restored.requireCurrent(in: writer)
+                } catch SwiftRefactoringPublicationError.staleSource {
+                    rejected = true
+                }
+                try Expect.true(rejected, "capture freshness detects unrelated changes")
+            }
+
             Step("prepare compiler-validated Writers changes without publishing") {
                 let fixture = try publicationFixture()
                 defer { try? FileManager.default.removeItem(at: fixture.root) }

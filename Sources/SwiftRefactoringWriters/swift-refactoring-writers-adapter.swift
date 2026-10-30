@@ -50,31 +50,25 @@ public struct SwiftRefactoringWritersAdapter: Sendable {
         try snapshot.requireCurrent(in: workspace)
         let preview = try plan.preview(sources: package.files)
         let root = package.root.standardizedFileURL
-        let prefix = root.path + "/"
 
         let documents: [Document] = try plan.baselines.keys
             .sorted { $0.path < $1.path }
             .map { file in
-                guard file.isFileURL,
-                    file == file.standardizedFileURL,
-                    file.path.hasPrefix(prefix),
-                    file.pathExtension == "swift" else {
+                guard file.pathExtension == "swift" else {
                     throw SwiftRefactoringPublicationError.invalidTarget(file)
                 }
                 guard let baseline = plan.baselines[file],
                     let revised = preview[file] else {
                     throw SwiftRefactoringPublicationError.missingPreview(file)
                 }
-
-                let relative = String(file.path.dropFirst(prefix.count))
+                let authorized = try SwiftRefactoringWorkspaceSources.authorize(
+                    file,
+                    packageRoot: root,
+                    in: workspace
+                )
+                let relative = authorized.presentationPath
                 guard relative.hasPrefix("Sources/") else {
                     throw SwiftRefactoringPublicationError.invalidTarget(file)
-                }
-
-                let authorized = try workspace.authorize(relative)
-                guard authorized.absoluteURL.resolvingSymlinksInPath()
-                    == file.resolvingSymlinksInPath() else {
-                    throw SwiftRefactoringPublicationError.targetMappingMismatch(file)
                 }
 
                 return Document(
@@ -129,7 +123,6 @@ public struct SwiftRefactoringWritersAdapter: Sendable {
     ) async throws -> SwiftRefactoringPublicationPreparation {
         try draft.snapshot.requireCurrent(in: workspace)
         let package = draft.snapshot.package
-        let prefix = package.root.path + "/"
         var replacements: [URL: String] = [:]
 
         for planned in draft.mutationPlan.entries {
@@ -138,21 +131,19 @@ public struct SwiftRefactoringWritersAdapter: Sendable {
                 entry.target == planned.target,
                 entry.policy == .existing,
                 entry.content == planned.after.textContent,
-                planned.target.path.hasPrefix(prefix),
                 planned.target.pathExtension == "swift" else {
                 throw SwiftRefactoringPublicationError.invalidTarget(planned.target)
             }
-            let relative = String(planned.target.path.dropFirst(prefix.count))
-            guard relative.hasPrefix("Sources/"),
+            let authorized = try SwiftRefactoringWorkspaceSources.authorize(
+                planned.target,
+                packageRoot: package.root,
+                in: workspace
+            )
+            guard authorized.presentationPath.hasPrefix("Sources/"),
                 let baseline = package.files[planned.target],
                 planned.before.textContent == baseline,
                 replacements[planned.target] == nil else {
                 throw SwiftRefactoringPublicationError.staleSource(planned.target)
-            }
-            let authorized = try workspace.authorize(relative)
-            guard authorized.absoluteURL.resolvingSymlinksInPath()
-                == planned.target.resolvingSymlinksInPath() else {
-                throw SwiftRefactoringPublicationError.targetMappingMismatch(planned.target)
             }
             replacements[planned.target] = entry.content
         }

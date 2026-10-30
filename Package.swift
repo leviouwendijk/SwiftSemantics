@@ -206,6 +206,10 @@ let package = Package(
             dependencies: [
                 "SwiftRefactoring",
                 .product(
+                    name: "Path",
+                    package: "Path"
+                ),
+                .product(
                     name: "Writers",
                     package: "Writers"
                 ),

@@ -17,26 +17,22 @@ public struct SwiftRefactoringPublicationSnapshot: Sendable {
     /// Does not reserve paths or make publication atomic.
     public func requireCurrent(in workspace: WorkspaceWriter) throws {
         let root = package.root
-        let prefix = root.path + "/"
         var expectedSources: Set<URL> = []
 
         for (file, baseline) in package.files {
-            guard file.isFileURL,
-                file == file.standardizedFileURL,
-                file.path.hasPrefix(prefix) else {
-                throw SwiftRefactoringPublicationError.invalidTarget(file)
-            }
-            let relative = String(file.path.dropFirst(prefix.count))
+            let authorized = try SwiftRefactoringWorkspaceSources.authorize(
+                file,
+                packageRoot: root,
+                in: workspace
+            )
+            let relative = authorized.presentationPath
             guard relative == "Package.swift" || relative.hasPrefix("Sources/") else {
                 throw SwiftRefactoringPublicationError.invalidTarget(file)
             }
 
-            let authorized = try workspace.authorize(relative)
-            guard authorized.absoluteURL.standardizedFileURL == file,
-                file.resolvingSymlinksInPath() == file else {
-                throw SwiftRefactoringPublicationError.targetMappingMismatch(file)
-            }
-            guard let actual = try? Data(contentsOf: file),
+            guard let actual = try StandardResourceState.read(
+                at: authorized.absoluteURL
+            ).dataContent,
                 actual == Data(baseline.utf8) else {
                 throw SwiftRefactoringPublicationError.staleSource(file)
             }
