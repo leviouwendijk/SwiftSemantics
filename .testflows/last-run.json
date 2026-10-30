@@ -3,12 +3,12 @@
   "failed_names" : [
 
   ],
-  "generated_at" : "2026-10-30T17:34:59Z",
+  "generated_at" : "2026-10-30T19:26:51Z",
   "passed" : 20,
   "results" : [
     {
       "display_name" : "semantic-package-graph",
-      "duration_seconds" : 1.153370976448059,
+      "duration_seconds" : 1.2888489961624146,
       "name" : "semantic-package-graph",
       "status" : "passed",
       "tags" : [
@@ -21,7 +21,7 @@
     },
     {
       "display_name" : "semantic-package-rules",
-      "duration_seconds" : 0.0006650686264038086,
+      "duration_seconds" : 0.0014749765396118164,
       "name" : "semantic-package-rules",
       "status" : "passed",
       "tags" : [
@@ -36,7 +36,7 @@
     },
     {
       "display_name" : "semantic-package-dependency-proof-matrix",
-      "duration_seconds" : 0.0002200603485107422,
+      "duration_seconds" : 0.0004639625549316406,
       "name" : "semantic-package-dependency-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -51,7 +51,7 @@
     },
     {
       "display_name" : "semantic-import-inventory",
-      "duration_seconds" : 1.122225046157837,
+      "duration_seconds" : 1.206868052482605,
       "name" : "semantic-import-inventory",
       "status" : "passed",
       "tags" : [
@@ -64,7 +64,7 @@
     },
     {
       "display_name" : "semantic-source-structure",
-      "duration_seconds" : 0.01892101764678955,
+      "duration_seconds" : 0.01942598819732666,
       "name" : "semantic-source-structure",
       "status" : "passed",
       "tags" : [
@@ -77,7 +77,7 @@
     },
     {
       "display_name" : "semantic-rule-foundation",
-      "duration_seconds" : 0.001170039176940918,
+      "duration_seconds" : 0.001322031021118164,
       "name" : "semantic-rule-foundation",
       "status" : "passed",
       "tags" : [
@@ -90,7 +90,7 @@
     },
     {
       "display_name" : "authored-rules",
-      "duration_seconds" : 0.002866029739379883,
+      "duration_seconds" : 0.002805948257446289,
       "name" : "authored-rules",
       "status" : "passed",
       "tags" : [
@@ -102,7 +102,7 @@
     },
     {
       "display_name" : "semantic-authored-rule-proof-matrix",
-      "duration_seconds" : 0.00385892391204834,
+      "duration_seconds" : 0.003901958465576172,
       "name" : "semantic-authored-rule-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -116,7 +116,7 @@
     },
     {
       "display_name" : "source-convention-rules",
-      "duration_seconds" : 0.003977060317993164,
+      "duration_seconds" : 0.003990054130554199,
       "name" : "source-convention-rules",
       "status" : "passed",
       "tags" : [
@@ -130,7 +130,7 @@
     },
     {
       "display_name" : "semantic-source-convention-proof-matrix",
-      "duration_seconds" : 0.00518488883972168,
+      "duration_seconds" : 0.005030989646911621,
       "name" : "semantic-source-convention-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -145,7 +145,7 @@
     },
     {
       "display_name" : "semantic-design-convention-rules",
-      "duration_seconds" : 0.004173994064331055,
+      "duration_seconds" : 0.004189014434814453,
       "name" : "semantic-design-convention-rules",
       "status" : "passed",
       "tags" : [
@@ -158,7 +158,7 @@
     },
     {
       "display_name" : "semantic-design-convention-proof-matrix",
-      "duration_seconds" : 0.009920001029968262,
+      "duration_seconds" : 0.010605096817016602,
       "name" : "semantic-design-convention-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -174,7 +174,7 @@
     },
     {
       "display_name" : "semantic-architecture-rules",
-      "duration_seconds" : 0.0001989603042602539,
+      "duration_seconds" : 0.0002720355987548828,
       "name" : "semantic-architecture-rules",
       "status" : "passed",
       "tags" : [
@@ -187,7 +187,7 @@
     },
     {
       "display_name" : "semantic-architecture-proof-matrix",
-      "duration_seconds" : 0.00020802021026611328,
+      "duration_seconds" : 0.00020205974578857422,
       "name" : "semantic-architecture-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -203,7 +203,7 @@
     },
     {
       "display_name" : "semantic-lint-presentation",
-      "duration_seconds" : 0.00309908390045166,
+      "duration_seconds" : 0.003216981887817383,
       "name" : "semantic-lint-presentation",
       "status" : "passed",
       "tags" : [
@@ -217,7 +217,7 @@
     },
     {
       "display_name" : "generated-rule-catalog",
-      "duration_seconds" : 0.0009959936141967773,
+      "duration_seconds" : 0.0011979341506958008,
       "name" : "generated-rule-catalog",
       "status" : "passed",
       "tags" : [
@@ -230,7 +230,7 @@
     },
     {
       "display_name" : "semantic-call-graph-structure",
-      "duration_seconds" : 0.002750992774963379,
+      "duration_seconds" : 0.0029129981994628906,
       "name" : "semantic-call-graph-structure",
       "status" : "passed",
       "tags" : [
@@ -241,7 +241,7 @@
     },
     {
       "display_name" : "semantic-call-graph-revision-difference",
-      "duration_seconds" : 0.0003839731216430664,
+      "duration_seconds" : 0.0004750490188598633,
       "name" : "semantic-call-graph-revision-difference",
       "status" : "passed",
       "tags" : [
@@ -251,7 +251,7 @@
     },
     {
       "display_name" : "swift-refactoring-source-preservation",
-      "duration_seconds" : 0.00433194637298584,
+      "duration_seconds" : 0.004474043846130371,
       "name" : "swift-refactoring-source-preservation",
       "status" : "passed",
       "tags" : [
@@ -261,7 +261,7 @@
     },
     {
       "display_name" : "swift-refactoring-rename-plan",
-      "duration_seconds" : 0.00041306018829345703,
+      "duration_seconds" : 0.0006710290908813477,
       "name" : "swift-refactoring-rename-plan",
       "status" : "passed",
       "tags" : [

@@ -7,6 +7,7 @@ public enum SwiftRefactoringCompilerValidationError: Error, Sendable {
     case unsupportedPackageFile(URL)
     case unsupportedRefactoringFile(URL)
     case noSwiftSources
+    case emptyReplacements
 }
 
 /// Complete source-only SwiftPM package snapshot. No files are read from
@@ -73,17 +74,29 @@ public struct SwiftRefactoringCompilerValidator: Sendable {
         _ plan: SwiftRefactoringRenamePlan,
         package: SwiftRefactoringCompilerPackage
     ) async throws -> SwiftRefactoringCompilerValidation {
-        for file in plan.baselines.keys {
+        let preview = try plan.preview(sources: package.files)
+        return try await validate(package: package, replacements: preview)
+    }
+
+    /// Compile exactly the replacement bytes supplied by a reviewed mutation.
+    /// Approval and source freshness remain the responsibility of the caller.
+    public func validate(
+        package: SwiftRefactoringCompilerPackage,
+        replacements: [URL: String]
+    ) async throws -> SwiftRefactoringCompilerValidation {
+        guard !replacements.isEmpty else {
+            throw SwiftRefactoringCompilerValidationError.emptyReplacements
+        }
+        for file in replacements.keys {
             guard let relative = SwiftRefactoringCompilerPackage.relativePath(
                 file, below: package.root
-            ), SwiftRefactoringCompilerPackage.isSwiftSource(relative) else {
+            ), SwiftRefactoringCompilerPackage.isSwiftSource(relative),
+                package.files[file] != nil else {
                 throw SwiftRefactoringCompilerValidationError.unsupportedRefactoringFile(file)
             }
         }
-
-        let preview = try plan.preview(sources: package.files)
         var stagedFiles = package.files
-        stagedFiles.merge(preview) { _, revised in revised }
+        stagedFiles.merge(replacements) { _, revised in revised }
 
         let stage = FileManager.default.temporaryDirectory
             .appendingPathComponent("swift-refactoring-validate-\(UUID().uuidString)", isDirectory: true)

@@ -8,7 +8,7 @@ import Writers
 public struct SwiftRefactoringPublicationSnapshot: Sendable {
     public let package: SwiftRefactoringCompilerPackage
 
-    init(package: SwiftRefactoringCompilerPackage) {
+    public init(package: SwiftRefactoringCompilerPackage) {
         self.package = package
     }
 

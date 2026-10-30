@@ -12,8 +12,23 @@ public enum SwiftRefactoringPublicationError: Error, Sendable {
     case compilerRejected(String)
 }
 
-/// A compiler-validated Writers plan, prepared but not applied.
-/// Approval and publication remain the responsibility of the host.
+/// Review-only draft. Construction and serialization never perform a build.
+/// Compiler validation remains mandatory before this plan is published.
+public struct SwiftRefactoringPublicationDraft: Sendable {
+    public let mutationPlan: StandardMutationPlan
+    public let snapshot: SwiftRefactoringPublicationSnapshot
+
+    public init(
+        mutationPlan: StandardMutationPlan,
+        snapshot: SwiftRefactoringPublicationSnapshot
+    ) {
+        self.mutationPlan = mutationPlan
+        self.snapshot = snapshot
+    }
+}
+
+/// Compiler-validated Writers plan, still not applied. The host must approve
+/// and then apply the *same* mutationPlan through its governed execution path.
 public struct SwiftRefactoringPublicationPreparation: Sendable {
     public let validation: SwiftRefactoringCompilerValidation
     public let mutationPlan: StandardMutationPlan
@@ -25,11 +40,12 @@ public struct SwiftRefactoringPublicationPreparation: Sendable {
 public struct SwiftRefactoringWritersAdapter: Sendable {
     public init() {}
 
-    public func prepare(
+    /// Creates an authorized Writers review plan without running SwiftPM.
+    public func prepareReview(
         _ plan: SwiftRefactoringRenamePlan,
         package: SwiftRefactoringCompilerPackage,
         workspace: WorkspaceWriter
-    ) async throws -> SwiftRefactoringPublicationPreparation {
+    ) throws -> SwiftRefactoringPublicationDraft {
         let snapshot = SwiftRefactoringPublicationSnapshot(package: package)
         try snapshot.requireCurrent(in: workspace)
         let preview = try plan.preview(sources: package.files)
@@ -87,7 +103,7 @@ public struct SwiftRefactoringWritersAdapter: Sendable {
             metadata: [
                 "origin": "swift-refactoring",
                 "operation": "rename",
-                "verification": "swiftpm-build",
+                "verification": "swiftpm-build-required",
             ]
         )
 
@@ -102,24 +118,72 @@ public struct SwiftRefactoringWritersAdapter: Sendable {
             }
         }
 
+        try snapshot.requireCurrent(in: workspace)
+        return .init(mutationPlan: mutationPlan, snapshot: snapshot)
+    }
+
+    /// Validate the exact reviewed mutation after human approval.
+    public func validate(
+        _ draft: SwiftRefactoringPublicationDraft,
+        workspace: WorkspaceWriter
+    ) async throws -> SwiftRefactoringPublicationPreparation {
+        try draft.snapshot.requireCurrent(in: workspace)
+        let package = draft.snapshot.package
+        let prefix = package.root.path + "/"
+        var replacements: [URL: String] = [:]
+
+        for planned in draft.mutationPlan.entries {
+            guard case .replace_text(let entry) = planned.entry,
+                planned.resource == .update,
+                entry.target == planned.target,
+                entry.policy == .existing,
+                entry.content == planned.after.textContent,
+                planned.target.path.hasPrefix(prefix),
+                planned.target.pathExtension == "swift" else {
+                throw SwiftRefactoringPublicationError.invalidTarget(planned.target)
+            }
+            let relative = String(planned.target.path.dropFirst(prefix.count))
+            guard relative.hasPrefix("Sources/"),
+                let baseline = package.files[planned.target],
+                planned.before.textContent == baseline,
+                replacements[planned.target] == nil else {
+                throw SwiftRefactoringPublicationError.staleSource(planned.target)
+            }
+            let authorized = try workspace.authorize(relative)
+            guard authorized.absoluteURL.resolvingSymlinksInPath()
+                == planned.target.resolvingSymlinksInPath() else {
+                throw SwiftRefactoringPublicationError.targetMappingMismatch(planned.target)
+            }
+            replacements[planned.target] = entry.content
+        }
+        guard !replacements.isEmpty else {
+            throw SwiftRefactoringPublicationError.noChanges
+        }
         let validation = try await SwiftRefactoringCompilerValidator().validate(
-            plan,
-            package: package
+            package: package,
+            replacements: replacements
         )
         guard validation.succeeded else {
             throw SwiftRefactoringPublicationError.compilerRejected(
                 validation.stdout + "\n" + validation.stderr
             )
         }
-
-        // Compilation may take time. Recheck the complete supplied package snapshot.
-        try snapshot.requireCurrent(in: workspace)
-
+        try draft.snapshot.requireCurrent(in: workspace)
         return .init(
             validation: validation,
-            mutationPlan: mutationPlan,
-            snapshot: snapshot
+            mutationPlan: draft.mutationPlan,
+            snapshot: draft.snapshot
         )
+    }
+
+    /// Compatibility for trusted direct callers; still invokes compiler.
+    public func prepare(
+        _ plan: SwiftRefactoringRenamePlan,
+        package: SwiftRefactoringCompilerPackage,
+        workspace: WorkspaceWriter
+    ) async throws -> SwiftRefactoringPublicationPreparation {
+        let draft = try prepareReview(plan, package: package, workspace: workspace)
+        return try await validate(draft, workspace: workspace)
     }
 }
 

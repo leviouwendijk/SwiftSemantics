@@ -61,6 +61,78 @@ extension SwiftSemanticsFlowSuite {
                 )
             }
 
+            Step("review draft preserves exact Writers plan without compiler execution") {
+                let fixture = try publicationFixture()
+                defer { try? FileManager.default.removeItem(at: fixture.root) }
+                let writer = try WorkspaceWriter(root: fixture.root)
+                let adapter = SwiftRefactoringWritersAdapter()
+                let draft = try adapter.prepareReview(
+                    publicationRenamePlan(fixture),
+                    package: fixture.package,
+                    workspace: writer
+                )
+                try Expect.equal(draft.mutationPlan.entries.count, 2, "two review edits")
+                try Expect.equal(
+                    String(contentsOf: fixture.declaration, encoding: .utf8),
+                    "public struct Alpha { public init() {} }\n",
+                    "preparation never publishes"
+                )
+
+                let serializedPlan = try JSONEncoder().encode(draft.mutationPlan)
+                let restoredPlan = try JSONDecoder().decode(
+                    StandardMutationPlan.self, from: serializedPlan
+                )
+                let serializedFiles = try JSONEncoder().encode(draft.snapshot.package.files)
+                let restoredFiles = try JSONDecoder().decode(
+                    [URL: String].self, from: serializedFiles
+                )
+                let restoredPackage = try SwiftRefactoringCompilerPackage(
+                    root: fixture.root, files: restoredFiles
+                )
+                let restored = SwiftRefactoringPublicationDraft(
+                    mutationPlan: restoredPlan,
+                    snapshot: .init(package: restoredPackage)
+                )
+                let validated = try await adapter.validate(restored, workspace: writer)
+                try Expect.true(validated.validation.succeeded, "approved edits compile")
+                try Expect.equal(
+                    validated.mutationPlan.id,
+                    draft.mutationPlan.id,
+                    "validation never replans the reviewed mutation"
+                )
+                try Expect.equal(
+                    validated.mutationPlan.entries,
+                    draft.mutationPlan.entries,
+                    "validation retains the exact reviewed entries"
+                )
+            }
+
+            Step("post-review drift blocks compiler execution and publication") {
+                let fixture = try publicationFixture()
+                defer { try? FileManager.default.removeItem(at: fixture.root) }
+                let writer = try WorkspaceWriter(root: fixture.root)
+                let adapter = SwiftRefactoringWritersAdapter()
+                let draft = try adapter.prepareReview(
+                    publicationRenamePlan(fixture),
+                    package: fixture.package,
+                    workspace: writer
+                )
+                let stable = fixture.root.appendingPathComponent("Sources/Core/Stable.swift")
+                try Data("public let stable = 99\n".utf8).write(to: stable)
+                var rejected = false
+                do {
+                    _ = try await adapter.validate(draft, workspace: writer)
+                } catch SwiftRefactoringPublicationError.staleSource {
+                    rejected = true
+                }
+                try Expect.true(rejected, "post-review source drift rejected")
+                try Expect.equal(
+                    String(contentsOf: fixture.declaration, encoding: .utf8),
+                    "public struct Alpha { public init() {} }\n",
+                    "failed validation never publishes"
+                )
+            }
+
             Step("reject disk drift before compiler validation") {
                 let fixture = try publicationFixture()
                 defer { try? FileManager.default.removeItem(at: fixture.root) }
@@ -150,13 +222,45 @@ extension SwiftSemanticsFlowSuite {
                     package: fixture.package,
                     workspace: writer
                 )
-                try preparation.snapshot.requireCurrent(in: writer)
+                let serializedFiles = try JSONEncoder().encode(
+                    preparation.snapshot.package.files
+                )
+                let restoredFiles = try JSONDecoder().decode(
+                    [URL: String].self,
+                    from: serializedFiles
+                )
+                let restoredPackage = try SwiftRefactoringCompilerPackage(
+                    root: fixture.root,
+                    files: restoredFiles
+                )
+                let restoredSnapshot = SwiftRefactoringPublicationSnapshot(
+                    package: restoredPackage
+                )
+                try restoredSnapshot.requireCurrent(in: writer)
+
+                let serializedPlan = try JSONEncoder().encode(
+                    preparation.mutationPlan
+                )
+                let restoredPlan = try JSONDecoder().decode(
+                    StandardMutationPlan.self,
+                    from: serializedPlan
+                )
+                try Expect.equal(
+                    restoredPlan.id,
+                    preparation.mutationPlan.id,
+                    "serialized Writers plan preserves identity"
+                )
+                try Expect.equal(
+                    restoredPlan.entries,
+                    preparation.mutationPlan.entries,
+                    "serialized Writers plan preserves exact entries"
+                )
 
                 let stable = fixture.root.appendingPathComponent("Sources/Core/Stable.swift")
                 try Data("public let stable = 3\n".utf8).write(to: stable)
                 var rejected = false
                 do {
-                    try preparation.snapshot.requireCurrent(in: writer)
+                    try restoredSnapshot.requireCurrent(in: writer)
                 } catch SwiftRefactoringPublicationError.staleSource {
                     rejected = true
                 }
