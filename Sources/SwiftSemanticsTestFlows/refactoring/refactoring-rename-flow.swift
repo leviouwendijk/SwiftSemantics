@@ -1,11 +1,36 @@
 import Foundation
 import SwiftRefactoring
 import SwiftSemantics
+import Schema
 import TestFlows
 
 extension SwiftSemanticsFlowSuite {
     static var refactoringRenameFlow: TestFlow {
         TestFlow("swift-refactoring-rename-plan", tags: ["refactoring", "rename"]) {
+            Step("native rename result retains ordered typed schema and transport") {
+                let file = URL(fileURLWithPath: "/tmp/rename-schema.swift")
+                let proposal = SwiftSemanticRenameResult(documents: [
+                    .init(uri: file, version: 7, edits: [
+                        .init(range: span(1, 1, 6), newText: "`switch`"),
+                    ]),
+                    .init(uri: file, version: 7, edits: [
+                        .init(range: span(1, 1, 9), newText: "Done"),
+                    ]),
+                ])
+                let restored = try JSONDecoder().decode(
+                    SwiftSemanticRenameResult.self,
+                    from: JSONEncoder().encode(proposal)
+                )
+                try Expect.equal(restored, proposal, "native proposal round-trips unchanged")
+                try Expect.equal(restored.documents.count, 2, "ordered groups preserved")
+                try Expect.equal(restored.documents[0].version, 7, "document version retained")
+
+                func requireSchema<T: JSONSchemaProviding>(_: T.Type) {}
+                requireSchema(SwiftSemanticRenameEdit.self)
+                requireSchema(SwiftSemanticRenameDocument.self)
+                requireSchema(SwiftSemanticRenameResult.self)
+            }
+
             Step("preview cross-file rename without writing files") {
                 let declaration = URL(fileURLWithPath: "/tmp/r5b-declaration.swift")
                 let usage = URL(fileURLWithPath: "/tmp/r5b-usage.swift")

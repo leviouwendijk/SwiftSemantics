@@ -1,7 +1,10 @@
 import Foundation
+import Macros
+import Schema
 
 /// One compiler-proposed replacement in one source document.
 /// Positions are one-based UTF-16 coordinates, not UTF-8 offsets.
+@JSONSchema
 public struct SwiftSemanticRenameEdit:
     Codable,
     Sendable,
@@ -20,6 +23,7 @@ public struct SwiftSemanticRenameEdit:
 }
 
 /// Edits for one document, preserving the LSP version constraint when provided.
+@JSONSchema
 public struct SwiftSemanticRenameDocument:
     Codable,
     Sendable,
@@ -46,6 +50,7 @@ public struct SwiftSemanticRenameDocument:
 /// coordinate bases, ordering dependencies, and overlapping edits.
 /// Consumers must validate all target paths, source baselines, edit ranges,
 /// and compilation before publication. Index completeness is not guaranteed.
+@JSONSchema
 public struct SwiftSemanticRenameResult:
     Codable,
     Sendable,
