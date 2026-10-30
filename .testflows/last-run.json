@@ -3,12 +3,12 @@
   "failed_names" : [
 
   ],
-  "generated_at" : "2026-10-24T21:33:17Z",
-  "passed" : 21,
+  "generated_at" : "2026-10-30T17:34:59Z",
+  "passed" : 20,
   "results" : [
     {
       "display_name" : "semantic-package-graph",
-      "duration_seconds" : 1.0216410160064697,
+      "duration_seconds" : 1.153370976448059,
       "name" : "semantic-package-graph",
       "status" : "passed",
       "tags" : [
@@ -21,7 +21,7 @@
     },
     {
       "display_name" : "semantic-package-rules",
-      "duration_seconds" : 0.0008510351181030273,
+      "duration_seconds" : 0.0006650686264038086,
       "name" : "semantic-package-rules",
       "status" : "passed",
       "tags" : [
@@ -36,7 +36,7 @@
     },
     {
       "display_name" : "semantic-package-dependency-proof-matrix",
-      "duration_seconds" : 0.00028693675994873047,
+      "duration_seconds" : 0.0002200603485107422,
       "name" : "semantic-package-dependency-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -51,7 +51,7 @@
     },
     {
       "display_name" : "semantic-import-inventory",
-      "duration_seconds" : 1.0119450092315674,
+      "duration_seconds" : 1.122225046157837,
       "name" : "semantic-import-inventory",
       "status" : "passed",
       "tags" : [
@@ -64,7 +64,7 @@
     },
     {
       "display_name" : "semantic-source-structure",
-      "duration_seconds" : 0.01775801181793213,
+      "duration_seconds" : 0.01892101764678955,
       "name" : "semantic-source-structure",
       "status" : "passed",
       "tags" : [
@@ -77,7 +77,7 @@
     },
     {
       "display_name" : "semantic-rule-foundation",
-      "duration_seconds" : 0.0008870363235473633,
+      "duration_seconds" : 0.001170039176940918,
       "name" : "semantic-rule-foundation",
       "status" : "passed",
       "tags" : [
@@ -90,7 +90,7 @@
     },
     {
       "display_name" : "authored-rules",
-      "duration_seconds" : 0.0025420188903808594,
+      "duration_seconds" : 0.002866029739379883,
       "name" : "authored-rules",
       "status" : "passed",
       "tags" : [
@@ -102,7 +102,7 @@
     },
     {
       "display_name" : "semantic-authored-rule-proof-matrix",
-      "duration_seconds" : 0.0034749507904052734,
+      "duration_seconds" : 0.00385892391204834,
       "name" : "semantic-authored-rule-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -116,7 +116,7 @@
     },
     {
       "display_name" : "source-convention-rules",
-      "duration_seconds" : 0.003666996955871582,
+      "duration_seconds" : 0.003977060317993164,
       "name" : "source-convention-rules",
       "status" : "passed",
       "tags" : [
@@ -130,7 +130,7 @@
     },
     {
       "display_name" : "semantic-source-convention-proof-matrix",
-      "duration_seconds" : 0.004634976387023926,
+      "duration_seconds" : 0.00518488883972168,
       "name" : "semantic-source-convention-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -145,7 +145,7 @@
     },
     {
       "display_name" : "semantic-design-convention-rules",
-      "duration_seconds" : 0.003574967384338379,
+      "duration_seconds" : 0.004173994064331055,
       "name" : "semantic-design-convention-rules",
       "status" : "passed",
       "tags" : [
@@ -158,7 +158,7 @@
     },
     {
       "display_name" : "semantic-design-convention-proof-matrix",
-      "duration_seconds" : 0.009294986724853516,
+      "duration_seconds" : 0.009920001029968262,
       "name" : "semantic-design-convention-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -174,7 +174,7 @@
     },
     {
       "display_name" : "semantic-architecture-rules",
-      "duration_seconds" : 0.00016891956329345703,
+      "duration_seconds" : 0.0001989603042602539,
       "name" : "semantic-architecture-rules",
       "status" : "passed",
       "tags" : [
@@ -187,7 +187,7 @@
     },
     {
       "display_name" : "semantic-architecture-proof-matrix",
-      "duration_seconds" : 0.00016105175018310547,
+      "duration_seconds" : 0.00020802021026611328,
       "name" : "semantic-architecture-proof-matrix",
       "status" : "passed",
       "tags" : [
@@ -203,7 +203,7 @@
     },
     {
       "display_name" : "semantic-lint-presentation",
-      "duration_seconds" : 0.002456068992614746,
+      "duration_seconds" : 0.00309908390045166,
       "name" : "semantic-lint-presentation",
       "status" : "passed",
       "tags" : [
@@ -217,7 +217,7 @@
     },
     {
       "display_name" : "generated-rule-catalog",
-      "duration_seconds" : 0.0008380413055419922,
+      "duration_seconds" : 0.0009959936141967773,
       "name" : "generated-rule-catalog",
       "status" : "passed",
       "tags" : [
@@ -229,52 +229,8 @@
       ]
     },
     {
-      "display_name" : "semantic-sourcekit-lsp-session",
-      "duration_seconds" : 0.9891370534896851,
-      "name" : "semantic-sourcekit-lsp-session",
-      "status" : "passed",
-      "tags" : [
-        "compiler-semantics",
-        "integration",
-        "sourcekit-lsp",
-        "swift-semantics",
-        "workspace"
-      ]
-    },
-    {
-      "display_name" : "semantic-sourcekit-lsp-operations",
-      "duration_seconds" : 13.032720923423767,
-      "name" : "semantic-sourcekit-lsp-operations",
-      "status" : "passed",
-      "tags" : [
-        "compiler-semantics",
-        "definitions",
-        "diagnostics",
-        "implementations",
-        "references",
-        "sourcekit-lsp",
-        "workspace-symbols"
-      ]
-    },
-    {
-      "display_name" : "semantic-sourcekit-lsp-advanced-operations",
-      "duration_seconds" : 12.836810946464539,
-      "name" : "semantic-sourcekit-lsp-advanced-operations",
-      "status" : "passed",
-      "tags" : [
-        "call-hierarchy",
-        "compiler-semantics",
-        "document-symbols",
-        "hover",
-        "sourcekit-lsp",
-        "symbol-identity",
-        "type-hierarchy",
-        "usr"
-      ]
-    },
-    {
       "display_name" : "semantic-call-graph-structure",
-      "duration_seconds" : 0.003911018371582031,
+      "duration_seconds" : 0.002750992774963379,
       "name" : "semantic-call-graph-structure",
       "status" : "passed",
       "tags" : [
@@ -285,16 +241,36 @@
     },
     {
       "display_name" : "semantic-call-graph-revision-difference",
-      "duration_seconds" : 0.00042808055877685547,
+      "duration_seconds" : 0.0003839731216430664,
       "name" : "semantic-call-graph-revision-difference",
       "status" : "passed",
       "tags" : [
         "call-graph",
         "difference"
       ]
+    },
+    {
+      "display_name" : "swift-refactoring-source-preservation",
+      "duration_seconds" : 0.00433194637298584,
+      "name" : "swift-refactoring-source-preservation",
+      "status" : "passed",
+      "tags" : [
+        "regression",
+        "swift-refactoring"
+      ]
+    },
+    {
+      "display_name" : "swift-refactoring-rename-plan",
+      "duration_seconds" : 0.00041306018829345703,
+      "name" : "swift-refactoring-rename-plan",
+      "status" : "passed",
+      "tags" : [
+        "refactoring",
+        "rename"
+      ]
     }
   ],
   "skipped" : 0,
-  "title" : "SwiftSemantics flow tests",
-  "total" : 21
+  "title" : "SwiftSemantics fast flow tests",
+  "total" : 20
 }

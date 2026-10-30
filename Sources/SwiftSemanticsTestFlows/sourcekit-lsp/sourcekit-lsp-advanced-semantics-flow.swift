@@ -283,10 +283,8 @@ extension SwiftSemanticsFlowSuite {
                     )
 
                     try await workspace.shutdownCompilerSession()
-                    fixture.remove()
                 } catch {
                     try? await workspace.shutdownCompilerSession()
-                    fixture.remove()
                     throw error
                 }
             }
@@ -300,13 +298,7 @@ private struct SwiftAdvancedSemanticFixture {
     let useFile: URL
 
     init() throws {
-        root = FileManager
-            .default
-            .temporaryDirectory
-            .appendingPathComponent(
-                "swift-semantics-advanced-\(UUID().uuidString)",
-                isDirectory: true
-            )
+        root = try SwiftPersistentFixture.root(named: "advanced")
 
         symbolsFile = root
             .appendingPathComponent(
@@ -397,11 +389,12 @@ private extension SwiftAdvancedSemanticFixture {
             withIntermediateDirectories: true
         )
 
-        try contents.write(
-            to: destination,
-            atomically: true,
-            encoding: .utf8
-        )
+        guard FileManager.default.fileExists(atPath: destination.path) else {
+            throw SwiftPersistentFixtureError.missing(destination)
+        }
+        guard try String(contentsOf: destination, encoding: .utf8) == contents else {
+            throw SwiftPersistentFixtureError.drift(destination)
+        }
     }
 }
 

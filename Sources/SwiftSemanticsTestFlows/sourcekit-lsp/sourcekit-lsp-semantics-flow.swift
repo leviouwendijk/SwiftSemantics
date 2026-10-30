@@ -1,4 +1,5 @@
 import Foundation
+import SwiftRefactoring
 import SwiftSemantics
 import TestFlows
 
@@ -116,6 +117,89 @@ extension SwiftSemanticsFlowSuite {
                         "references include usage file"
                     )
 
+                    // Rename the type declaration rather than its initializer call.
+                    // A constructor reference can produce an incomplete type rename.
+                    let rename = try await workspace.rename(
+                        in: fixture.protocolFile,
+                        at: .init(
+                            line: 5,
+                            utf16Column: 19
+                        ),
+                        to: "GreetingProvider"
+                    )
+                    let renamedFiles = Set(rename.documents.map {
+                        $0.uri.standardizedFileURL
+                    })
+
+                    try Expect.true(
+                        renamedFiles.contains(fixture.protocolFile.standardizedFileURL),
+                        "compiler rename includes the type declaration"
+                    )
+                    try Expect.true(
+                        renamedFiles.contains(fixture.useFile.standardizedFileURL),
+                        "compiler rename includes the cross-file type reference"
+                    )
+                    try Expect.true(
+                        rename.documents.flatMap(\.edits).contains {
+                            $0.newText == "GreetingProvider"
+                        },
+                        "compiler rename proposes the requested spelling"
+                    )
+                    try Expect.true(
+                        try String(contentsOf: fixture.protocolFile, encoding: .utf8)
+                            .contains("public struct EnglishGreeter"),
+                        "rename proposal does not modify the declaration file"
+                    )
+                    try Expect.true(
+                        try String(contentsOf: fixture.useFile, encoding: .utf8)
+                            .contains("EnglishGreeter"),
+                        "rename proposal does not modify the reference file"
+                    )
+
+                    let declarationBaseline = try String(
+                        contentsOf: fixture.protocolFile,
+                        encoding: .utf8
+                    )
+                    let referenceBaseline = try String(
+                        contentsOf: fixture.useFile,
+                        encoding: .utf8
+                    )
+                    let baselines = [
+                        fixture.protocolFile: declarationBaseline,
+                        fixture.useFile: referenceBaseline,
+                    ]
+                    let renamePlan = try SwiftRefactoringRenamePlanner().plan(
+                        rename,
+                        sources: baselines,
+                        versions: [
+                            fixture.protocolFile: 1,
+                            fixture.useFile: 1,
+                        ]
+                    )
+                    let preview = try renamePlan.preview(sources: baselines)
+                    try Expect.true(
+                        preview[fixture.protocolFile]?.contains(
+                            "public struct GreetingProvider: Greeter"
+                        ) == true,
+                        "compiler rename preview updates the declaration"
+                    )
+                    try Expect.true(
+                        preview[fixture.useFile]?.contains(
+                            "GreetingProvider()"
+                        ) == true,
+                        "compiler rename preview updates cross-file usage"
+                    )
+                    try Expect.equal(
+                        String(contentsOf: fixture.protocolFile, encoding: .utf8),
+                        declarationBaseline,
+                        "preview does not mutate declaration"
+                    )
+                    try Expect.equal(
+                        String(contentsOf: fixture.useFile, encoding: .utf8),
+                        referenceBaseline,
+                        "preview does not mutate reference"
+                    )
+
                     let diagnostics = try await eventually(
                         label: "compiler diagnostics"
                     ) {
@@ -187,10 +271,8 @@ extension SwiftSemanticsFlowSuite {
                     )
 
                     try await workspace.shutdownCompilerSession()
-                    fixture.remove()
                 } catch {
                     try? await workspace.shutdownCompilerSession()
-                    fixture.remove()
                     throw error
                 }
             }
@@ -204,13 +286,7 @@ private struct SwiftCompilerSemanticFixture {
     let useFile: URL
 
     init() throws {
-        root = FileManager
-            .default
-            .temporaryDirectory
-            .appendingPathComponent(
-                "swift-semantics-sourcekit-\(UUID().uuidString)",
-                isDirectory: true
-            )
+        root = try SwiftPersistentFixture.root(named: "operations")
 
         protocolFile = root
             .appendingPathComponent(
@@ -292,11 +368,12 @@ private extension SwiftCompilerSemanticFixture {
             withIntermediateDirectories: true
         )
 
-        try contents.write(
-            to: destination,
-            atomically: true,
-            encoding: .utf8
-        )
+        guard FileManager.default.fileExists(atPath: destination.path) else {
+            throw SwiftPersistentFixtureError.missing(destination)
+        }
+        guard try String(contentsOf: destination, encoding: .utf8) == contents else {
+            throw SwiftPersistentFixtureError.drift(destination)
+        }
     }
 }
 

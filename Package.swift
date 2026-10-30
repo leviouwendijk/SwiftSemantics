@@ -14,10 +14,58 @@ let package = Package(
                 "SwiftSemantics",
             ]
         ),
+        .library(
+            name: "SwiftRefactoring",
+            targets: [
+                "SwiftRefactoring",
+            ]
+        ),
         .executable(
             name: "t_semantics",
             targets: [
-                "SwiftSemanticsTestFlows",
+                "SwiftSemanticsAllTestCLI",
+            ]
+        ),
+        .executable(
+            name: "t_semantics_fast",
+            targets: [
+                "SwiftSemanticsFastTestCLI",
+            ]
+        ),
+        .executable(
+            name: "t_semantics_lsp",
+            targets: [
+                "SwiftSemanticsCompilerTestCLI",
+            ]
+        ),
+        .executable(
+            name: "t_semantics_rename",
+            targets: [
+                "SwiftSemanticsRenameTestCLI",
+            ]
+        ),
+        .executable(
+            name: "t_semantics_validate",
+            targets: [
+                "SwiftSemanticsValidateTestCLI",
+            ]
+        ),
+        .library(
+            name: "SwiftRefactoringWriters",
+            targets: [
+                "SwiftRefactoringWriters",
+            ]
+        ),
+        .executable(
+            name: "t_semantics_prepare",
+            targets: [
+                "SwiftSemanticsPrepareTestCLI",
+            ]
+        ),
+        .executable(
+            name: "t_semantics_publish",
+            targets: [
+                "SwiftSemanticsPublishTestCLI",
             ]
         ),
         .executable(
@@ -46,6 +94,10 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/leviouwendijk/Processes.git",
+            branch: "master"
+        ),
+        .package(
+            url: "https://github.com/leviouwendijk/Writers.git",
             branch: "master"
         ),
         .package(
@@ -135,6 +187,30 @@ let package = Package(
                 ),
             ]
         ),
+        .target(
+            name: "SwiftRefactoring",
+            dependencies: [
+                "SwiftSemantics",
+                .product(
+                    name: "SwiftSyntax",
+                    package: "swift-syntax"
+                ),
+                .product(
+                    name: "Processes",
+                    package: "Processes"
+                ),
+            ]
+        ),
+        .target(
+            name: "SwiftRefactoringWriters",
+            dependencies: [
+                "SwiftRefactoring",
+                .product(
+                    name: "Writers",
+                    package: "Writers"
+                ),
+            ]
+        ),
         .executableTarget(
             name: "SwiftSemanticRuleCatalogGenerator",
             dependencies: [
@@ -191,11 +267,17 @@ let package = Package(
                 ),
             ]
         ),
-        .executableTarget(
+        .target(
             name: "SwiftSemanticsTestFlows",
             dependencies: [
                 "SwiftSemantics",
+                "SwiftRefactoring",
+                "SwiftRefactoringWriters",
                 "SwiftSemanticLintPresentation",
+                .product(
+                    name: "Writers",
+                    package: "Writers"
+                ),
                 .product(
                     name: "Difference",
                     package: "Difference"
@@ -205,6 +287,34 @@ let package = Package(
                     package: "TestFlows"
                 ),
             ]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticsAllTestCLI",
+            dependencies: ["SwiftSemanticsTestFlows"]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticsFastTestCLI",
+            dependencies: ["SwiftSemanticsTestFlows"]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticsCompilerTestCLI",
+            dependencies: ["SwiftSemanticsTestFlows"]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticsRenameTestCLI",
+            dependencies: ["SwiftSemanticsTestFlows"]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticsValidateTestCLI",
+            dependencies: ["SwiftSemanticsTestFlows"]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticsPrepareTestCLI",
+            dependencies: ["SwiftSemanticsTestFlows"]
+        ),
+        .executableTarget(
+            name: "SwiftSemanticsPublishTestCLI",
+            dependencies: ["SwiftSemanticsTestFlows"]
         ),
     ],
     swiftLanguageModes: [

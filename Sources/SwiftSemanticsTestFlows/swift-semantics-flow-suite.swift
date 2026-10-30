@@ -1,12 +1,9 @@
 import TestFlows
 
-enum SwiftSemanticsFlowSuite:
-    TestFlowRegistry
-{
-    static let title =
-        "SwiftSemantics flow tests"
+enum SwiftSemanticsFlowSuite: TestFlowRegistry {
+    static let title = "SwiftSemantics flow tests"
 
-    static let flows: [TestFlow] = [
+    static let fastFlows: [TestFlow] = [
         packageGraphFlow,
         packageRulesFlow,
         packageDependencyProofFlow,
@@ -23,10 +20,20 @@ enum SwiftSemanticsFlowSuite:
         architectureProofFlow,
         lintPresentationFlow,
         generatedRuleCatalogFlow,
+        callGraphStructureFlow,
+        callGraphDifferenceFlow,
+        refactoringFlow,
+        refactoringRenameFlow,
+    ]
+
+    static let compilerFlows: [TestFlow] = [
+        refactoringCompilerValidationFlow,
+        refactoringPublicationPreparationFlow,
+        refactoringPublicationExecutionFlow,
         sourceKitLSPSessionFlow,
         sourceKitLSPSemanticsFlow,
         sourceKitLSPAdvancedSemanticsFlow,
-        callGraphStructureFlow,
-        callGraphDifferenceFlow,
     ]
+
+    static let flows = fastFlows + compilerFlows
 }
