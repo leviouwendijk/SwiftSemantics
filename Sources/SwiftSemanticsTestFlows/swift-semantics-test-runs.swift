@@ -43,6 +43,7 @@ private enum SwiftSemanticsCompilerSuite: TestFlowRegistry {
 private enum SwiftSemanticsRenameSuite: TestFlowRegistry {
     static let title = "SwiftSemantics rename integration flow"
     static let flows: [TestFlow] = [
+        SwiftSemanticsFlowSuite.refactoringRenameFlow,
         SwiftSemanticsFlowSuite.sourceKitLSPSemanticsFlow,
     ]
 }

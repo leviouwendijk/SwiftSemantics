@@ -1,131 +1,48 @@
 import Position
 
-/// Shared UTF-8 offset to source-line mapping for SwiftSyntax-backed semantic
-/// projections.
-///
-/// SwiftSyntax positions are UTF-8 offsets. Higher semantic APIs intentionally
-/// expose stable line ranges rather than leaking syntax-tree positions.
-struct SwiftSourceLineMapper:
-    Sendable
-{
-    private let source: String
-    let utf8LineStarts: [Int]
+/// Source-backed SwiftSyntax UTF-8 and semantic coordinate projection.
+/// All boundaries are validated against the original source.
+struct SwiftSourceLineMapper: Sendable {
+    private let map: Position.TextMap
 
-    init(
-        source: String
-    ) {
-        self.source = source
-
-        var starts: [Int] = [
-            0,
-        ]
-        var offset = 0
-
-        for scalar in source.unicodeScalars {
-            offset += scalar.utf8.count
-
-            if scalar == "\n" {
-                starts.append(
-                    offset
-                )
-            }
-        }
-
-        utf8LineStarts = starts
+    init(source: String) {
+        map = Position.TextMap(source: source)
     }
 
-    func lineNumber(
-        atUTF8Offset offset: Int
-    ) -> Int {
-        guard !utf8LineStarts.isEmpty else {
-            return 1
-        }
-
-        var low = 0
-        var high = utf8LineStarts.count - 1
-        var best = 0
-
-        while low <= high {
-            let mid = (low + high) / 2
-            let value = utf8LineStarts[mid]
-
-            if value == offset {
-                return mid + 1
-            }
-
-            if value < offset {
-                best = mid
-                low = mid + 1
-            } else {
-                high = mid - 1
-            }
-        }
-
-        return best + 1
-    }
-
-    /// Resolve Position-style source coordinates into SwiftSyntax's absolute
-    /// UTF-8 offset space.
-    ///
-    /// Lines and columns are one-based. Columns advance by Unicode scalar,
-    /// matching `Position.LineColumnTracker`; the returned offset advances by
-    /// each scalar's UTF-8 byte count.
-    func utf8Offset(
-        line: Int,
-        column: Int
-    ) -> Int? {
-        guard
-            line > 0,
-            column > 0
-        else {
+    /// Structural queries express one-based Unicode-scalar columns.
+    func utf8Offset(line: Int, column: Int) -> Int? {
+        guard let coordinate = try? Position.Coordinate<Position.Unit.UTF32>(
+            line: line,
+            column: column
+        ), let scalarOffset = try? map.offset(at: coordinate),
+            let byteOffset = try? map.convert(scalarOffset, to: Position.Unit.UTF8.self) else {
             return nil
         }
-
-        var tracker = LineColumnTracker()
-        var utf8Offset = 0
-
-        if tracker.line == line,
-            tracker.column == column
-        {
-            return utf8Offset
-        }
-
-        for scalar in source.unicodeScalars {
-            utf8Offset += scalar.utf8.count
-
-            tracker.advance(
-                over: scalar
-            )
-
-            if tracker.line == line,
-                tracker.column == column
-            {
-                return utf8Offset
-            }
-        }
-
-        return nil
+        return byteOffset.offset
     }
 
-    func lineRange(
-        startUTF8Offset: Int,
-        endUTF8Offset: Int
-    ) -> LineRange? {
-        let normalizedEnd = max(
-            startUTF8Offset,
-            endUTF8Offset - 1
-        )
+    func compilerPosition(atUTF8Offset rawOffset: Int) -> SwiftSemanticPosition? {
+        guard let byteOffset = try? Position.Offset<Position.Unit.UTF8>(rawOffset),
+            let byteCoordinate: Position.Coordinate<Position.Unit.UTF8> = try? map.coordinate(at: byteOffset),
+            let utf16 = try? map.convert(byteCoordinate, to: Position.Unit.UTF16.self) else {
+            return nil
+        }
+        return SwiftSemanticPosition(line: utf16.line, utf16Column: utf16.column)
+    }
 
-        let startLine = lineNumber(
-            atUTF8Offset: startUTF8Offset
-        )
-        let endLine = lineNumber(
-            atUTF8Offset: normalizedEnd
-        )
-
-        return try? .init(
-            start: startLine,
-            end: endLine
-        )
+    func lineRange(startUTF8Offset: Int, endUTF8Offset: Int) -> LineRange? {
+        guard endUTF8Offset >= startUTF8Offset,
+            let startOffset = try? Position.Offset<Position.Unit.UTF8>(startUTF8Offset),
+            let endOffset = try? Position.Offset<Position.Unit.UTF8>(endUTF8Offset),
+            let start: Position.Coordinate<Position.Unit.UTF8> = try? map.coordinate(at: startOffset),
+            let end: Position.Coordinate<Position.Unit.UTF8> = try? map.coordinate(at: endOffset) else {
+            return nil
+        }
+        // A nonempty half-open range ending at the next line's first column
+        // belongs to the preceding line, not the following one.
+        let finalLine = endUTF8Offset > startUTF8Offset && end.column == 1
+            ? end.line - 1
+            : end.line
+        return try? LineRange(start: start.line, end: finalLine)
     }
 }

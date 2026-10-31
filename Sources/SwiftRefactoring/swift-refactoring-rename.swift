@@ -1,5 +1,6 @@
 import Foundation
 import SwiftSemantics
+import Position
 
 public enum SwiftRefactoringRenameError: Error, Sendable {
     case emptyProposal
@@ -93,14 +94,25 @@ public struct SwiftRefactoringRenamePlanner: Sendable {
             }
 
             let current = staged[file] ?? baseline
+            let map = Position.TextMap(source: current)
             let original = Data(current.utf8)
             let edits: [SwiftRefactoringEdit] = try document.edits.map { edit in
-                let start = try offset(edit.range.start, in: current, file: file)
-                let end = try offset(edit.range.end, in: current, file: file)
+                guard let start = try? Position.Coordinate<Position.Unit.UTF16>(
+                    line: edit.range.start.line,
+                    column: edit.range.start.utf16Column
+                ), let end = try? Position.Coordinate<Position.Unit.UTF16>(
+                    line: edit.range.end.line,
+                    column: edit.range.end.utf16Column
+                ) else {
+                    throw SwiftRefactoringRenameError.invalidPosition(file)
+                }
                 guard start <= end else {
                     throw SwiftRefactoringRenameError.reversedRange(file)
                 }
-                let range = start..<end
+                guard let coordinates = try? Position.CoordinateRange(start: start, end: end),
+                    let range = try? map.utf8Range(of: coordinates) else {
+                    throw SwiftRefactoringRenameError.invalidPosition(file)
+                }
                 guard let expected = String(
                     data: original.subdata(in: range),
                     encoding: .utf8
@@ -125,29 +137,4 @@ public struct SwiftRefactoringRenamePlanner: Sendable {
         return SwiftRefactoringRenamePlan(groups: groups, baselines: baselines)
     }
 
-    private func offset(
-        _ position: SwiftSemanticPosition,
-        in source: String,
-        file: URL
-    ) throws -> Int {
-        let lines = source.components(separatedBy: "\n")
-        guard position.line > 0,
-            position.utf16Column > 0,
-            lines.indices.contains(position.line - 1) else {
-            throw SwiftRefactoringRenameError.invalidPosition(file)
-        }
-        let line = lines[position.line - 1]
-        let units = line.utf16
-        let column = position.utf16Column - 1
-        guard column <= units.count else {
-            throw SwiftRefactoringRenameError.invalidPosition(file)
-        }
-        let utf16Index = units.index(units.startIndex, offsetBy: column)
-        guard let index = String.Index(utf16Index, within: line) else {
-            throw SwiftRefactoringRenameError.invalidPosition(file)
-        }
-        let preceding = lines.prefix(position.line - 1)
-            .reduce(0) { $0 + $1.utf8.count + 1 }
-        return preceding + line[..<index].utf8.count
-    }
 }

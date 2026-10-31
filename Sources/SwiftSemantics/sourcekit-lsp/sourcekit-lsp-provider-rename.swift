@@ -11,6 +11,11 @@ extension SourceKitLSPProvider {
                 "Compiler rename requires a nonempty replacement name."
             )
         }
+        guard position.line > 0, position.utf16Column > 0 else {
+            throw SwiftSemanticCompilerError.protocolViolation(
+                "Compiler rename requires a positive one-based UTF-16 position."
+            )
+        }
 
         let file = try await synchronizeDocument(file)
         let response: SourceKitLSPRenameWorkspaceEdit? =

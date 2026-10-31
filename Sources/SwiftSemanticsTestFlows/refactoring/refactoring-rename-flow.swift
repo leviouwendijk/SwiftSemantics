@@ -103,6 +103,78 @@ extension SwiftSemanticsFlowSuite {
                 try Expect.equal(preview[file], "let x = 0\r\nlet y = Beta()\r\n", "CRLF")
             }
 
+            Step("preserve standalone CR and reject invalid CRLF interior positions") {
+                let file = URL(fileURLWithPath: "/tmp/r5b-cr-standalone.swift")
+                let text = "let x = 0\rlet y = Alpha()\r"
+                let proposal = SwiftSemanticRenameResult(documents: [
+                    .init(uri: file, version: nil, edits: [
+                        .init(range: span(2, 9, 14), newText: "Beta"),
+                    ]),
+                ])
+                let plan = try SwiftRefactoringRenamePlanner().plan(proposal, sources: [file: text])
+                let preview = try plan.preview(sources: [file: text])
+                try Expect.equal(preview[file], "let x = 0\rlet y = Beta()\r", "CR-only line boundaries")
+
+                let crlf = "let x = 0\r\nlet y = Alpha()\r\n"
+                let invalid = SwiftSemanticRenameResult(documents: [
+                    .init(uri: file, version: nil, edits: [
+                        .init(range: span(1, 10, 11), newText: "X"),
+                    ]),
+                ])
+                var rejected = false
+                do {
+                    _ = try SwiftRefactoringRenamePlanner().plan(invalid, sources: [file: crlf])
+                } catch SwiftRefactoringRenameError.invalidPosition {
+                    rejected = true
+                }
+                try Expect.true(rejected, "CRLF terminator interior is not a logical column")
+            }
+
+            Step("compiler edit ranges avoid unrelated textual matches after complex Unicode") {
+                let file = URL(fileURLWithPath: "/tmp/r5b-semantic-only.swift")
+                let prefix = "let glyph = \"👩‍💻\"; "
+                let text = prefix + "Alpha()\n// Alpha must stay unchanged\n"
+                let start = prefix.utf16.count + 1
+                let proposal = SwiftSemanticRenameResult(documents: [
+                    .init(uri: file, version: nil, edits: [
+                        .init(range: span(1, start, start + 5), newText: "Beta"),
+                    ]),
+                ])
+                let plan = try SwiftRefactoringRenamePlanner().plan(proposal, sources: [file: text])
+                let preview = try plan.preview(sources: [file: text])
+                try Expect.equal(
+                    preview[file],
+                    prefix + "Beta()\n// Alpha must stay unchanged\n",
+                    "Only compiler-proposed occurrence changes"
+                )
+                try Expect.equal(
+                    plan.groups[0].edits[0].utf8Range.lowerBound,
+                    prefix.utf8.count,
+                    "Typed UTF-16 position converts to exact UTF-8 byte offset"
+                )
+            }
+
+            Step("reject zero and out-of-range compiler coordinates") {
+                let file = URL(fileURLWithPath: "/tmp/r5b-invalid-coordinates.swift")
+                for invalidRange in [span(1, 0, 1), span(2, 1, 2), span(1, 1, 100)] {
+                    let proposal = SwiftSemanticRenameResult(documents: [
+                        .init(uri: file, version: nil, edits: [
+                            .init(range: invalidRange, newText: "Beta"),
+                        ]),
+                    ])
+                    var rejected = false
+                    do {
+                        _ = try SwiftRefactoringRenamePlanner().plan(
+                            proposal,
+                            sources: [file: "Alpha\n"]
+                        )
+                    } catch SwiftRefactoringRenameError.invalidPosition {
+                        rejected = true
+                    }
+                    try Expect.true(rejected, "Invalid UTF-16 coordinate must fail closed")
+                }
+            }
+
             Step("preserve repeated document groups and their successive coordinate bases") {
                 let file = URL(fileURLWithPath: "/tmp/r5b-sequential.swift")
                 let text = "let name = Alpha()\n"

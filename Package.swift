@@ -191,6 +191,7 @@ let package = Package(
             name: "SwiftRefactoring",
             dependencies: [
                 "SwiftSemantics",
+                .product(name: "Position", package: "Position"),
                 .product(
                     name: "SwiftSyntax",
                     package: "swift-syntax"
