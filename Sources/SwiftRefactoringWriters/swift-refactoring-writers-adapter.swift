@@ -88,7 +88,8 @@ public struct SwiftRefactoringWritersAdapter: Sendable {
             .replaceText(
                 at: document.relative,
                 content: document.revised,
-                policy: .existing
+                policy: .existing,
+                options: .overwriteWithoutBackup
             )
         }
 

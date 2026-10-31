@@ -1,14 +1,34 @@
 {
-  "failed" : 0,
+  "failed" : 1,
   "failed_names" : [
-
+    "semantic-sourcekit-lsp-operations"
   ],
-  "generated_at" : "2026-10-31T10:41:36Z",
-  "passed" : 1,
+  "generated_at" : "2026-10-31T15:37:37Z",
+  "passed" : 5,
   "results" : [
     {
+      "display_name" : "swift-refactoring-staged-compiler-validation",
+      "duration_seconds" : 40.31655693054199,
+      "name" : "swift-refactoring-staged-compiler-validation",
+      "status" : "passed",
+      "tags" : [
+        "compiler-validation",
+        "refactoring"
+      ]
+    },
+    {
+      "display_name" : "swift-refactoring-writers-preparation",
+      "duration_seconds" : 39.29909801483154,
+      "name" : "swift-refactoring-writers-preparation",
+      "status" : "passed",
+      "tags" : [
+        "publication",
+        "refactoring"
+      ]
+    },
+    {
       "display_name" : "swift-refactoring-coordinated-publication",
-      "duration_seconds" : 40.36711394786835,
+      "duration_seconds" : 39.577032923698425,
       "name" : "swift-refactoring-coordinated-publication",
       "status" : "passed",
       "tags" : [
@@ -16,9 +36,53 @@
         "refactoring",
         "rollback"
       ]
+    },
+    {
+      "display_name" : "semantic-sourcekit-lsp-session",
+      "duration_seconds" : 0.4081360101699829,
+      "name" : "semantic-sourcekit-lsp-session",
+      "status" : "passed",
+      "tags" : [
+        "compiler-semantics",
+        "integration",
+        "sourcekit-lsp",
+        "swift-semantics",
+        "workspace"
+      ]
+    },
+    {
+      "display_name" : "semantic-sourcekit-lsp-operations",
+      "duration_seconds" : 1.2390639781951904,
+      "name" : "semantic-sourcekit-lsp-operations",
+      "status" : "failed",
+      "tags" : [
+        "compiler-semantics",
+        "definitions",
+        "diagnostics",
+        "implementations",
+        "references",
+        "sourcekit-lsp",
+        "workspace-symbols"
+      ]
+    },
+    {
+      "display_name" : "semantic-sourcekit-lsp-advanced-operations",
+      "duration_seconds" : 14.263437986373901,
+      "name" : "semantic-sourcekit-lsp-advanced-operations",
+      "status" : "passed",
+      "tags" : [
+        "call-hierarchy",
+        "compiler-semantics",
+        "document-symbols",
+        "hover",
+        "sourcekit-lsp",
+        "symbol-identity",
+        "type-hierarchy",
+        "usr"
+      ]
     }
   ],
   "skipped" : 0,
-  "title" : "SwiftSemantics coordinated publication flow",
-  "total" : 1
+  "title" : "SwiftSemantics compiler flow tests",
+  "total" : 6
 }

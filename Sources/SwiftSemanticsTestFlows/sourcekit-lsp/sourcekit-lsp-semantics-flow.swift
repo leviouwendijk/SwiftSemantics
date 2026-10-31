@@ -84,6 +84,8 @@ extension SwiftSemanticsFlowSuite {
                         "Greeter protocol resolves EnglishGreeter implementation"
                     )
 
+                    try await workspace.synchronizeIndex(timeoutSeconds: 90)
+
                     let references = try await eventually(
                         label: "indexed references"
                     ) {

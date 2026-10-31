@@ -102,6 +102,15 @@ extension SwiftSemanticsFlowSuite {
                     workspace: writer
                 )
                 try Expect.equal(draft.mutationPlan.entries.count, 2, "two review edits")
+                try Expect.true(
+                    draft.mutationPlan.entries.allSatisfy { planned in
+                        guard case .replace_text(let entry) = planned.entry else {
+                            return false
+                        }
+                        return entry.options.resolvedBackupPolicy == .disabled
+                    },
+                    "reviewed renames must never create backups inside SwiftPM Sources"
+                )
                 try Expect.equal(
                     String(contentsOf: fixture.declaration, encoding: .utf8),
                     "public struct Alpha { public init() {} }\n",
