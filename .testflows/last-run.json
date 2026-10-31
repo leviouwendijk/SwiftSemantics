@@ -1,14 +1,14 @@
 {
-  "failed" : 1,
+  "failed" : 0,
   "failed_names" : [
-    "semantic-sourcekit-lsp-operations"
+
   ],
-  "generated_at" : "2026-10-31T15:37:37Z",
-  "passed" : 5,
+  "generated_at" : "2026-10-31T15:57:09Z",
+  "passed" : 6,
   "results" : [
     {
       "display_name" : "swift-refactoring-staged-compiler-validation",
-      "duration_seconds" : 40.31655693054199,
+      "duration_seconds" : 42.9541300535202,
       "name" : "swift-refactoring-staged-compiler-validation",
       "status" : "passed",
       "tags" : [
@@ -18,7 +18,7 @@
     },
     {
       "display_name" : "swift-refactoring-writers-preparation",
-      "duration_seconds" : 39.29909801483154,
+      "duration_seconds" : 41.238157987594604,
       "name" : "swift-refactoring-writers-preparation",
       "status" : "passed",
       "tags" : [
@@ -28,7 +28,7 @@
     },
     {
       "display_name" : "swift-refactoring-coordinated-publication",
-      "duration_seconds" : 39.577032923698425,
+      "duration_seconds" : 43.07501995563507,
       "name" : "swift-refactoring-coordinated-publication",
       "status" : "passed",
       "tags" : [
@@ -39,7 +39,7 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-session",
-      "duration_seconds" : 0.4081360101699829,
+      "duration_seconds" : 0.43914198875427246,
       "name" : "semantic-sourcekit-lsp-session",
       "status" : "passed",
       "tags" : [
@@ -52,9 +52,9 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-operations",
-      "duration_seconds" : 1.2390639781951904,
+      "duration_seconds" : 1.533689022064209,
       "name" : "semantic-sourcekit-lsp-operations",
-      "status" : "failed",
+      "status" : "passed",
       "tags" : [
         "compiler-semantics",
         "definitions",
@@ -67,7 +67,7 @@
     },
     {
       "display_name" : "semantic-sourcekit-lsp-advanced-operations",
-      "duration_seconds" : 14.263437986373901,
+      "duration_seconds" : 0.448449969291687,
       "name" : "semantic-sourcekit-lsp-advanced-operations",
       "status" : "passed",
       "tags" : [

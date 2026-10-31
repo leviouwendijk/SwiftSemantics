@@ -8,10 +8,18 @@ private struct SourceKitLSPVoidResult: Decodable, Sendable {}
 
 extension SourceKitLSPProvider {
     func synchronizeIndex(timeout: Duration) async throws {
-        let _: SourceKitLSPVoidResult? = try await transport.requestOptional(
-            method: "sourcekit/workspace/synchronize",
-            params: SourceKitLSPIndexSynchronizationParams(),
-            timeout: timeout
-        )
+        do {
+            let _: SourceKitLSPVoidResult? = try await transport.requestOptional(
+                method: "sourcekit/workspace/synchronize",
+                params: SourceKitLSPIndexSynchronizationParams(),
+                timeout: timeout
+            )
+        } catch SwiftSemanticCompilerError.requestFailed(code: -32601, message: _) {
+            let _: SourceKitLSPVoidResult? = try await transport.requestOptional(
+                method: "workspace/synchronize",
+                params: SourceKitLSPIndexSynchronizationParams(),
+                timeout: timeout
+            )
+        }
     }
 }
