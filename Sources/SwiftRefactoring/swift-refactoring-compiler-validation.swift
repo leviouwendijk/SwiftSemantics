@@ -98,7 +98,10 @@ public struct SwiftRefactoringCompilerValidator: Sendable {
         var stagedFiles = package.files
         stagedFiles.merge(replacements) { _, revised in revised }
 
-        let stage = FileManager.default.temporaryDirectory
+        // SwiftPM resolves local package dependencies relative to Package.swift.
+        // A sibling stage preserves those paths without altering the manifest
+        // or any original sources. This requires write access to the parent.
+        let stage = package.root.deletingLastPathComponent()
             .appendingPathComponent("swift-refactoring-validate-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: stage, withIntermediateDirectories: false)
         defer { try? FileManager.default.removeItem(at: stage) }
