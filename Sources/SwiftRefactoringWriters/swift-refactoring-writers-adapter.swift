@@ -13,7 +13,7 @@ public enum SwiftRefactoringPublicationError: Error, Sendable {
 }
 
 /// Review-only draft. Construction and serialization never perform a build.
-/// Compiler validation remains mandatory before this plan is published.
+/// Compiler validation is available separately; publication policy belongs to the caller.
 public struct SwiftRefactoringPublicationDraft: Sendable {
     public let mutationPlan: StandardMutationPlan
     public let snapshot: SwiftRefactoringPublicationSnapshot
@@ -97,7 +97,7 @@ public struct SwiftRefactoringWritersAdapter: Sendable {
             metadata: [
                 "origin": "swift-refactoring",
                 "operation": "rename",
-                "verification": "swiftpm-build-required",
+                "verification": "source-snapshot-and-writers",
             ]
         )
 
