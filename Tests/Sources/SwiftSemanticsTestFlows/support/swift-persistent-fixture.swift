@@ -13,7 +13,7 @@ enum SwiftPersistentFixture {
             .deletingLastPathComponent()
             .deletingLastPathComponent()
             .appendingPathComponent(
-                "Testing/fixture-project/\(name)",
+                "Fixtures/fixture-project/\(name)",
                 isDirectory: true
             )
 
