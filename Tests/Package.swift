@@ -8,6 +8,13 @@ let package = Package(
         .macOS(.v13),
     ],
     products: [
+        .executable(name: "t_semantics", targets: ["SwiftSemanticsAllTestCLI"]),
+        .executable(name: "t_semantics_fast", targets: ["SwiftSemanticsFastTestCLI"]),
+        .executable(name: "t_semantics_lsp", targets: ["SwiftSemanticsCompilerTestCLI"]),
+        .executable(name: "t_semantics_rename", targets: ["SwiftSemanticsRenameTestCLI"]),
+        .executable(name: "t_semantics_validate", targets: ["SwiftSemanticsValidateTestCLI"]),
+        .executable(name: "t_semantics_prepare", targets: ["SwiftSemanticsPrepareTestCLI"]),
+        .executable(name: "t_semantics_publish", targets: ["SwiftSemanticsPublishTestCLI"]),
     ],
     dependencies: [
         .package(
@@ -46,6 +53,13 @@ let package = Package(
                 ),
             ]
         ),
+        .executableTarget(name: "SwiftSemanticsAllTestCLI", dependencies: ["SwiftSemanticsTestFlows"]),
+        .executableTarget(name: "SwiftSemanticsFastTestCLI", dependencies: ["SwiftSemanticsTestFlows"]),
+        .executableTarget(name: "SwiftSemanticsCompilerTestCLI", dependencies: ["SwiftSemanticsTestFlows"]),
+        .executableTarget(name: "SwiftSemanticsRenameTestCLI", dependencies: ["SwiftSemanticsTestFlows"]),
+        .executableTarget(name: "SwiftSemanticsValidateTestCLI", dependencies: ["SwiftSemanticsTestFlows"]),
+        .executableTarget(name: "SwiftSemanticsPrepareTestCLI", dependencies: ["SwiftSemanticsTestFlows"]),
+        .executableTarget(name: "SwiftSemanticsPublishTestCLI", dependencies: ["SwiftSemanticsTestFlows"]),
     ],
     swiftLanguageModes: [
         .v6,

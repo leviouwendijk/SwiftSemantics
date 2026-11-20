@@ -20,52 +20,10 @@ let package = Package(
                 "SwiftRefactoring",
             ]
         ),
-        .executable(
-            name: "t_semantics",
-            targets: [
-                "SwiftSemanticsAllTestCLI",
-            ]
-        ),
-        .executable(
-            name: "t_semantics_fast",
-            targets: [
-                "SwiftSemanticsFastTestCLI",
-            ]
-        ),
-        .executable(
-            name: "t_semantics_lsp",
-            targets: [
-                "SwiftSemanticsCompilerTestCLI",
-            ]
-        ),
-        .executable(
-            name: "t_semantics_rename",
-            targets: [
-                "SwiftSemanticsRenameTestCLI",
-            ]
-        ),
-        .executable(
-            name: "t_semantics_validate",
-            targets: [
-                "SwiftSemanticsValidateTestCLI",
-            ]
-        ),
         .library(
             name: "SwiftRefactoringWriters",
             targets: [
                 "SwiftRefactoringWriters",
-            ]
-        ),
-        .executable(
-            name: "t_semantics_prepare",
-            targets: [
-                "SwiftSemanticsPrepareTestCLI",
-            ]
-        ),
-        .executable(
-            name: "t_semantics_publish",
-            targets: [
-                "SwiftSemanticsPublishTestCLI",
             ]
         ),
         .executable(
@@ -264,34 +222,6 @@ let package = Package(
                     package: "Path"
                 ),
             ]
-        ),
-        .executableTarget(
-            name: "SwiftSemanticsAllTestCLI",
-            dependencies: ["SwiftSemanticsTestFlows"]
-        ),
-        .executableTarget(
-            name: "SwiftSemanticsFastTestCLI",
-            dependencies: ["SwiftSemanticsTestFlows"]
-        ),
-        .executableTarget(
-            name: "SwiftSemanticsCompilerTestCLI",
-            dependencies: ["SwiftSemanticsTestFlows"]
-        ),
-        .executableTarget(
-            name: "SwiftSemanticsRenameTestCLI",
-            dependencies: ["SwiftSemanticsTestFlows"]
-        ),
-        .executableTarget(
-            name: "SwiftSemanticsValidateTestCLI",
-            dependencies: ["SwiftSemanticsTestFlows"]
-        ),
-        .executableTarget(
-            name: "SwiftSemanticsPrepareTestCLI",
-            dependencies: ["SwiftSemanticsTestFlows"]
-        ),
-        .executableTarget(
-            name: "SwiftSemanticsPublishTestCLI",
-            dependencies: ["SwiftSemanticsTestFlows"]
         ),
     ],
     swiftLanguageModes: [
