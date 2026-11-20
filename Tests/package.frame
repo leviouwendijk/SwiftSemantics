@@ -1,3 +1,13 @@
 import Executable;
 
-let tests: Tests = .{ .primary = "t_semantics" };
+let tests: Tests = .{
+    .primary = "t_semantics",
+    .groups = .{
+        .fast = ["t_semantics_fast"],
+        .compiler = ["t_semantics_lsp"],
+        .rename = ["t_semantics_rename"],
+        .validate = ["t_semantics_validate"],
+        .prepare = ["t_semantics_prepare"],
+        .publish = ["t_semantics_publish"],
+    },
+};
