@@ -86,6 +86,7 @@ let package = Package(
                 "SwiftSemanticLintCLI",
             ]
         ),
+        .library(name: "SwiftSemanticLintPresentation", targets: ["SwiftSemanticLintPresentation"]),
     ],
     dependencies: [
         .package(
@@ -101,10 +102,6 @@ let package = Package(
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/TestFlows.git",
-            branch: "master"
-        ),
-        .package(
             url: "https://github.com/swiftlang/swift-syntax.git",
             from: "603.0.1"
         ),
@@ -114,10 +111,6 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/leviouwendijk/Primitives.git",
-            branch: "master"
-        ),
-        .package(
-            url: "https://github.com/leviouwendijk/Difference.git",
             branch: "master"
         ),
         .package(
@@ -269,27 +262,6 @@ let package = Package(
                 .product(
                     name: "PathParsing",
                     package: "Path"
-                ),
-            ]
-        ),
-        .target(
-            name: "SwiftSemanticsTestFlows",
-            dependencies: [
-                "SwiftSemantics",
-                "SwiftRefactoring",
-                "SwiftRefactoringWriters",
-                "SwiftSemanticLintPresentation",
-                .product(
-                    name: "Writers",
-                    package: "Writers"
-                ),
-                .product(
-                    name: "Difference",
-                    package: "Difference"
-                ),
-                .product(
-                    name: "TestFlows",
-                    package: "TestFlows"
                 ),
             ]
         ),
