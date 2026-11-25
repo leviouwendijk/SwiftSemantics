@@ -67,7 +67,7 @@
     {
       "identity" : "executable",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/leviouwendijk/Executable.git",
+      "location" : "https://github.com/swift-tooling/Executable.git",
       "state" : {
         "branch" : "master",
         "revision" : "3532d70d3ed5faa93377c1b7b7e699190446e980"
@@ -265,7 +265,7 @@
     {
       "identity" : "testflows",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/leviouwendijk/TestFlows.git",
+      "location" : "https://github.com/swift-tooling/TestFlows.git",
       "state" : {
         "branch" : "master",
         "revision" : "be40ad2a6a45d56b0065cdf7754b9709ef960b09"
@@ -274,7 +274,7 @@
     {
       "identity" : "testing",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/leviouwendijk/Testing.git",
+      "location" : "https://github.com/swift-tooling/Testing.git",
       "state" : {
         "branch" : "master",
         "revision" : "105eecb68c3db99119dff3afeb846b7923abbc85"
