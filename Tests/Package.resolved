@@ -1,0 +1,411 @@
+{
+  "originHash" : "8e5c572071b55e17224b88c159fcc2620e0e6869cc2d50da16ae41f27b8fb152",
+  "pins" : [
+    {
+      "identity" : "ansi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/ANSI.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "e54aa7c3e993c0217978be04c8e92fce8cf072db"
+      }
+    },
+    {
+      "identity" : "arguments",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Arguments.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "2bbd1184eb89d4c34e7d5be64417332b53d9764c"
+      }
+    },
+    {
+      "identity" : "atomos",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Atomos.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "d82fd2ccb56f9fafbb079435c4d70ff5207bfe8c"
+      }
+    },
+    {
+      "identity" : "clipboard",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Clipboard",
+      "state" : {
+        "branch" : "master",
+        "revision" : "09c9903569b82ae7eb11961e53ae9f0cd4cc838d"
+      }
+    },
+    {
+      "identity" : "difference",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Difference.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a48b9b92bc5e82d258f07f5a80f198841ea4d82c"
+      }
+    },
+    {
+      "identity" : "dsl",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-dsl/DSL",
+      "state" : {
+        "branch" : "master",
+        "revision" : "14b60217f2e8d6c94e9869ec6f81697aa416c55d"
+      }
+    },
+    {
+      "identity" : "errors",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Errors.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "66b044f9dbd2213b290d004aa9b19ab391ccf42e"
+      }
+    },
+    {
+      "identity" : "excerpt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Excerpt.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "2ed6f7962c295f4d3b8410951f480a4af0233ca9"
+      }
+    },
+    {
+      "identity" : "executable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Executable.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "860529ea595f889846d4b4c84b55d2fd664a1cff"
+      }
+    },
+    {
+      "identity" : "filetypes",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/FileTypes.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "315d095312091e4c089e60b24fa02df73d337531"
+      }
+    },
+    {
+      "identity" : "frame",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lco-langs/Frame.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "d3ac3b5a2f1302cf2c5784c30f299b88dba445b3"
+      }
+    },
+    {
+      "identity" : "fuzzy",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Fuzzy.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "9438d412ce22af457a6c93ab0d942e1c97260167"
+      }
+    },
+    {
+      "identity" : "grammar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-langs/Grammar.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "44d68ca80d2ac5cf197bec66746d720136f19866"
+      }
+    },
+    {
+      "identity" : "indentation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Indentation.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "85c8899eca62a4865a131c27ac950f117c138c67"
+      }
+    },
+    {
+      "identity" : "interfaces",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Interfaces.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "eed24e26f1d5b3d88ec273c4eb5cdd7f926d1d99"
+      }
+    },
+    {
+      "identity" : "io",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/IO.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "e7b8b41721cad2458d8bbd01f8d4a5f38dcd44ef"
+      }
+    },
+    {
+      "identity" : "lexing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-langs/Lexing.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "8af7b5e20aaf123d2908662c238ac5507c68298c"
+      }
+    },
+    {
+      "identity" : "macros",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Macros.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "1dce56620cebcf31ab5a553673ee19907f00f8c6"
+      }
+    },
+    {
+      "identity" : "matching",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Matching.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "21f42b5f67c76dfb48d0d6a73e9171dad7c09a96"
+      }
+    },
+    {
+      "identity" : "math",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Math.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "ee4dbda8563a747aee07674c13015fea97d6563b"
+      }
+    },
+    {
+      "identity" : "methods",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Methods.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "1515097c5409bb8eb61d93c54ce0db966a98f66b"
+      }
+    },
+    {
+      "identity" : "parsers",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-langs/Parsers.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "71946b149369d217504e31638aa35f0bc41a1164"
+      }
+    },
+    {
+      "identity" : "parsing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-langs/Parsing.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "fd3f4869b1c4246954e89a410fbb71017242e2dd"
+      }
+    },
+    {
+      "identity" : "path",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Path.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "0a71a3a916be673c549e67630daf28401f1c5498"
+      }
+    },
+    {
+      "identity" : "plate",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/plate.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "3e453e075e49977fd97b7b0d13b71533350050b6"
+      }
+    },
+    {
+      "identity" : "position",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Position.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "d9805b35c346369ef656e645902ad0cbe740c17d"
+      }
+    },
+    {
+      "identity" : "primitives",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Primitives.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "0c185c7cd2a829a47518a5134648b3cffc085b2a"
+      }
+    },
+    {
+      "identity" : "processes",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Processes.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "12ca3dcae6065f9e85ae83a0a3d150afbb6adf5c"
+      }
+    },
+    {
+      "identity" : "protocolcomponents",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/ProtocolComponents.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "e7a14cb15fccdf57e362f569e5683c639f78ab47"
+      }
+    },
+    {
+      "identity" : "ranking",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Ranking.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "383fbc38e012c12875d392b3a1e712497a1335bf"
+      }
+    },
+    {
+      "identity" : "readers",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Readers.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "e7d3b31a5bed16a83432fa6864c24248fdc925c4"
+      }
+    },
+    {
+      "identity" : "reporting",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Reporting.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "1b77e121c2a676679b5c780683f92d2615463cf2"
+      }
+    },
+    {
+      "identity" : "schema",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Schema.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "e45634af56b8f5ffe8a12a2922675e713dc38190"
+      }
+    },
+    {
+      "identity" : "search",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Search.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "db7f388464d5a27cf5dde43a0ee76d036458d4d3"
+      }
+    },
+    {
+      "identity" : "strings",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Strings",
+      "state" : {
+        "branch" : "master",
+        "revision" : "cc7396a5c06e61a67eb48846a72dbe39dfff3305"
+      }
+    },
+    {
+      "identity" : "swift-subprocess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-subprocess.git",
+      "state" : {
+        "revision" : "dbe21bd7dfd4ffef8c32588918542a8abfa1b54c",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
+      "state" : {
+        "revision" : "79e4b74a295b6eb74a8b585e3a39d29e70c1dbd1",
+        "version" : "603.0.2"
+      }
+    },
+    {
+      "identity" : "swift-system",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-system.git",
+      "state" : {
+        "revision" : "640e5755b5826f4437eaeedd366fd776737db62c",
+        "version" : "1.9.0"
+      }
+    },
+    {
+      "identity" : "syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-langs/Syntax.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "89b38e4691c17c2328b8eb6dde5618d144266f73"
+      }
+    },
+    {
+      "identity" : "terminal",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Terminal.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "cf4a02a5562df0b128b1f41c7b9563a227bc24db"
+      }
+    },
+    {
+      "identity" : "testflows",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/TestFlows.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "cce33b917f1bc5c4dd0536588a4aec4fe0832814"
+      }
+    },
+    {
+      "identity" : "testing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Testing.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "abe024a50cfbe3ebab5e538e023d30616a35d3a2"
+      }
+    },
+    {
+      "identity" : "tokens",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-langs/Tokens",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a52f358adda442f563771a318fc70d6a02c6b16e"
+      }
+    },
+    {
+      "identity" : "version",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Version.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "d7c22f28bdfe241fa817787f00d398b0150b15d5"
+      }
+    },
+    {
+      "identity" : "writers",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Writers.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "0b035b4ce663740e1b7cf08ed120f86dff51f5ad"
+      }
+    }
+  ],
+  "version" : 3
+}
