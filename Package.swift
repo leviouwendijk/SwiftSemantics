@@ -52,11 +52,11 @@ let package = Package(
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Processes.git",
+            url: "https://github.com/swift-lco/Processes.git",
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Writers.git",
+            url: "https://github.com/swift-lco/Writers.git",
             branch: "master"
         ),
         .package(
@@ -64,35 +64,35 @@ let package = Package(
             from: "603.0.1"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Position.git",
+            url: "https://github.com/swift-lco/Position.git",
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Primitives.git",
+            url: "https://github.com/swift-lco/Primitives.git",
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Schema.git",
+            url: "https://github.com/swift-lco/Schema.git",
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Macros.git",
+            url: "https://github.com/swift-lco/Macros.git",
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Arguments.git",
+            url: "https://github.com/swift-lco/Arguments.git",
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/ANSI.git",
+            url: "https://github.com/swift-lco/ANSI.git",
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Excerpt.git",
+            url: "https://github.com/swift-lco/Excerpt.git",
             branch: "master"
         ),
         .package(
-            url: "https://github.com/leviouwendijk/Path.git",
+            url: "https://github.com/swift-lco/Path.git",
             branch: "master"
         ),
     ],
